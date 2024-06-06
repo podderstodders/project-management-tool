@@ -1,0 +1,885 @@
+.app-absolute--item {
+    position: absolute;
+    top: 3rem;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 4;
+  }
+  
+  .absoluteItem-container {
+    
+    position: relative;
+    max-width: 1000px;
+    max-height: 90vh;
+
+    margin: 0 auto;
+    border-radius: 0.7rem;
+    border: 1px solid transparent;
+   
+    background-color: rgb(241, 242, 244);
+
+  
+  }
+
+  .absoluteItem-container .cardcover {
+    position: relative;
+    padding: 3rem;
+    border-radius: inherit;
+    border: inherit;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+  }
+
+  .cover-absolute--btn {
+    position: absolute;
+    bottom: 1rem;
+    right: 2rem;
+    font-weight: 400;
+  }
+  
+  .absoluteItem-container .cardview-container {
+    display: grid;
+    grid-template-columns: 3fr 1fr;
+    gap: 1em;
+    padding: 1rem;
+  }
+  
+  
+  .absoluteItem-container .cardview-container .lhs{
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+  
+  .lhs .lhs-row {
+    display: flex;
+    gap: 1em;
+  }
+  .lhs-row .lhs-item--svg {
+    width: 50px;
+    height: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .lhs-row .lhs-item--svg.colored {
+  
+    background-color: pink;
+   
+  }
+  .lhs-item--text,
+  .description-container {
+    width: 100%;
+  }
+
+  .lhs-item--textblock {
+    display: flex;
+    gap: 0.5rem; 
+    
+  }
+
+ .titleInput {
+    margin-bottom: 0.2rem;
+  }
+
+ .titleInput input[type=text] {
+    width: 100%;
+    font-weight: 700;
+    border: 2px solid transparent;
+    background-color: transparent;
+    /* padding-left: 5px; */
+    padding-top: 5px;
+    /* padding-left: 0.3rem;
+    font-size: 1.7rem;
+    padding-bottom: 0; */
+  }
+
+
+  .lhs-row.addons .addons-container {
+    display: flex;
+    gap: 1em;
+    flex-wrap: wrap;
+  }
+
+  .addons-container .labels {
+    position: relative;
+  }
+
+  .addons-container .labels-container {
+    display: flex; 
+    gap: 0.5rem;
+  }
+
+  .addons-container .labels-container .labels-item {
+    position: relative;
+    height: 40px;
+    width: 70px;
+    cursor: pointer;
+  }
+
+  .labels-item2 {
+    display: grid;
+    place-content: center;
+    height: 40px;
+    width: 60px;
+    background-color: rgb(220, 223, 228);
+    font-weight: 600;
+    font-size: 1.75rem;
+    cursor: pointer;
+  }
+
+  .addons-container .labels-container .labels-item:hover .labels-item--absoluteMessage {
+    display: block;
+  }
+
+  .labels-absolute--menu {
+    position: fixed;
+    top: 5rem;
+    width: 300px;
+    z-index: 3;
+    background-color: white;
+
+  }
+
+  .rhs-row--item .labels-absolute--menu {
+    top: 3rem;
+  }
+
+  .labels-menu--container {
+    position: relative;
+    padding: 1rem;
+  }
+
+.labels-menu--container.edit {
+  padding: 0;
+  font-size: 0.95rem;
+}
+
+.labels-menu--container.edit .label-edit--row.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-weight: 700;
+}
+
+
+.labels-menu--container.edit .label-edit--row.display {
+  padding: 1.5rem;
+  background-color: #f8f8f8;
+}
+
+.labels-menu--container.edit .label-edit--row.display .display--container {
+  padding: 0.2rem 0;
+  padding-left: 0.5rem;
+  background-color: #ffffff;
+  color: white;
+}
+.labels-menu--container.edit .label-edit--row.display .display--container::before {
+  content: '6';
+  color: transparent;
+}
+.labels-menu--container.edit .label-edit--row.input {
+  padding: 0.5rem;
+}
+.labels-menu--container.edit .label-edit--row.input input {
+  width: 100%;
+}
+
+.labels-menu--container.edit .label-edit--row p {
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+
+.label-edit--row.selections .selections-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(50px, 1fr));
+  gap: 5px;
+  height: 150px;
+  padding-bottom: 2rem;
+  overflow-y: auto;
+
+}
+
+.label-edit--row.selections {
+  padding: 0.5rem;
+}
+
+.label-edit--row.selections .selections-container .selections-item {
+  border: 2px solid transparent; 
+  padding: 2px;
+}
+
+.selections-item .selections-item--container {
+  position: relative;
+  padding: 1rem;
+}
+
+.selections-item--container__absolute {
+  display: none;
+  position: absolute;
+  top: 155%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 4;
+  font-size: 0.75rem;
+  padding: 5px;
+  background-color: black;
+  color: white;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.selections-item .selections-item--container:hover .selections-item--container__absolute {
+  display: block;
+}
+  .labels-menu--absolute--exitbtn {
+    position: absolute;
+    top: 0.2rem;
+    right: 0.3rem;
+  }
+
+  .label-edit--row.button {
+    padding: 0.3rem 0.5rem;
+  }
+  .label-edit--row.button button {
+    width: 100%;
+  }
+
+  .label-edit--row.divider {
+    padding: 0.3rem 0.7rem;
+  }
+
+  .label-edit--row.flexed {
+    padding: 0.5rem;
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    align-items: center;
+  }
+
+
+
+
+  .labels-item--absoluteMessage {
+    display: none;
+    position: absolute;
+    top: 3rem;
+    white-space: nowrap;
+    padding: 0.2rem 0.6rem;
+    background-color: #00031b;
+    color: white;
+    z-index: 4;
+  }
+
+  .labels-menu--row {
+    margin-bottom: 0.75rem;
+    font-weight: 700;
+  }
+
+  .labels-menu--row:last-of-type {
+    margin-bottom: 0;
+  }
+
+  .labels-menu--row.header {
+    text-align: center;
+  }
+
+  .labels-menu--row input{
+    width: 100%;
+  }
+  
+  .labels-menu--row p {
+    font-size: 0.85rem;
+    font-weight: 700;
+  }
+
+  .labels-menu--row button.btn-darker{
+    width: 100%;
+    padding: 0.2rem 0.5rem;
+    font-size: 0.85rem;
+    border-radius: 3px;
+  }
+
+
+  .labels-menu--grid {
+    margin: 0.45rem 0;
+    display: grid;
+    gap: 0.3rem;
+  }
+
+
+  .labels-menu--grid .flex-row {
+    display: grid;
+    gap: 0.3rem;
+    grid-template-columns: 1.5rem 1fr 1.5rem;
+  
+  }
+
+  .flex-item--edit {
+    padding: 0.2rem;
+    display: grid;
+    place-content: center;
+    background-color: #f2f2f2;
+    border-radius: 7.5px;
+  }
+
+  .flex-item--edit:hover {
+    background-color: #cfcfcf;
+    cursor: pointer;
+  }
+
+  .flex-item--edit span {
+    display: block;
+  
+  }
+
+  .flex-item--checkbox  {
+    align-self: start;
+  }
+  .flex-item--checkbox input[type=checkbox]{
+    accent-color: rgb(248, 6, 228);
+    width: 15px;
+    height: 15px;
+  }
+  .flex-row .flex-item--color {
+    position: relative;
+    flex: 1;
+    border-radius: 3px;
+    background-color: pink;
+    width: 100%;
+    height: 100%;
+  }
+
+  .flex-item--color__absolute {
+    display: none;
+    position: absolute;
+    top: 1.75rem;
+    left: 0.5rem;
+    z-index: 3;
+    background-color: black;
+    color: white;
+    font-size: 0.83rem;
+    padding: 3px 5px;
+  }
+  .flex-row .flex-item--color:hover .flex-item--color__absolute{
+    display: block;
+  }
+
+  
+
+  .notifications-action {
+    position: relative;
+    display: flex;
+    gap: 0.75rem;
+    align-items: flex-start;
+
+    font-size: 1rem;
+    font-weight: 700;
+    padding: 0.25rem 0.5rem;
+    border: 1px solid transparent;
+    background-color: #DCDFE4;
+  }
+
+  .notifications-middle {
+    align-self: flex-end;
+  }
+
+  .notifications-action:hover {
+    background-color: #B3B9C4;
+    cursor: pointer;
+  }
+
+
+
+  .notifications-active {
+      background-color: rgb(98, 111, 134);
+  }
+
+  .notifications-absolute--message {
+    display: none;
+    position: absolute;
+    top: 3rem;
+    left: 0;
+    width: 300px;
+    padding: 5px;
+    font-size: 0.91rem;
+    background-color: rgb(98, 111, 134);
+    color: white;
+    
+  }
+
+  .notifications-action:hover .notifications-absolute--message {
+    display: block;
+  }
+  
+  
+  .absoluteItem-moreabsolute--exitbtn {
+    position: absolute;
+    top:0.4rem;
+    right: 0.4rem;
+  }
+  
+  .absoluteItem-moreabsolute--exitbtn button {
+    border-radius: 50%;
+    background-color: transparent;
+    font-size: 2rem;
+    line-height: 1rem;
+    padding: 0.5rem;
+  }
+  
+  .absoluteItem-moreabsolute--exitbtn button:hover {
+    background-color: #000000ba;
+    color: white;
+  }
+
+
+  .absoluteItem-container .cardview-container .rhs {
+    margin-top: 3rem;
+  }
+  
+  .rhs-row {
+    color: rgb(23, 43, 77);
+    margin-bottom: 1rem;
+  }
+
+  .rhs-row--item {
+    position: relative;
+  }
+  
+  .rhs-row--header {
+    font-weight: 700;
+    font-size: 0.77rem;
+    margin-bottom: 5px;
+  }
+  .rhs-row--items {
+    display: grid;
+    gap: 7.5px;
+    
+  }
+
+
+  .rhs-row--item a {
+    padding: 0.35rem;
+    display: block;
+    color: black;
+  
+ 
+  }
+  .rhs-row--item a:hover {
+    background-color: #ffffff19;
+    color: black;
+    cursor: pointer;
+  }
+  .rhs-row--item__text {
+    font-weight: 700;
+    padding-left: 0.5rem;
+    color: inherit;
+  }
+  
+  .rhs-row--item__svg {
+    width: 20px;
+    height: 20px;
+    display: inline-block; 
+    padding-top: 3px;
+
+  }
+
+
+  .rhs-row--item .coverModal {
+    position: absolute;
+    top: 0;
+    width: 320px;
+
+    background-color: white;
+    border-radius: 5px;
+    z-index: 3;
+  }
+
+  .rhs-row--item .checklistmenu {
+    position: fixed;
+    width: 320px;
+
+
+    background-color: rgb(255, 255, 255);
+    border-radius: 5px;
+    z-index: 3;
+  }
+
+  .rhs-row--item .checklistmenu .checklistmenu-container {
+    position: relative;
+    padding: 0.5rem;
+  }
+
+  .checklistmenu-row {
+   
+  }
+  .checklistmenu-row input {
+    width: 100%;
+  }
+
+  .checklistmenu-row label {
+    font-size: 1rem;
+  
+  }
+  .checklistmenu-row.header {
+    margin: 0.37rem 0;
+    text-align: center;
+    font-weight: 650;
+    font-size: 0.86rem;
+   
+  }
+  .checklistmenu-row select {
+    width: 100%;
+  }
+  .checklistmenu-row.input input {
+    width: 100%;
+  }
+
+  .checklistmenu-row button.btn-primary{
+    padding: 0.2rem 1.5rem;
+    font-size: 0.75rem;
+
+  }
+
+  .checklistmenu-row.input {
+    margin-bottom: 0.75rem;
+  }
+
+  .checklistmenu-row.input div {
+    font-size: 0.77rem;
+    font-weight: 700;
+    line-height: 14.5px;
+  }
+
+
+  .checklistmenu-absolute--exitbtn {
+      position: absolute;
+      top: 5px;
+      right: 5px;
+  }
+
+  
+
+  .coverModal-container {
+    position: relative;
+    padding: 0.75rem;
+    padding-bottom: 1.5rem;
+  }
+
+  .coverModal-absolute--exitbtn {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+  }
+
+  .coverModal-row.header{
+    margin-top: 0.4rem;
+    font-weight: 600;
+    text-align: center;
+  }
+
+  .coverModal-grid {
+    display: grid;
+    gap: 0.35rem;
+  }
+  .coverModal-row {
+    margin-bottom: 0.6rem;
+  }
+  .coverModal-row p {
+    font-size: 0.77rem;
+    font-weight: 700;
+  }
+
+  .coverModal-row button {
+    width: 100%;
+    font-size: 0.87rem;
+  }
+
+  .coverModal-grid.x2{
+    grid-template-columns: 1fr 1fr;
+  }
+
+  /* this border is for selection */
+.halfportion,
+.fullportion {
+    position: relative;
+    height: 60px;
+    border: 2px solid transparent;
+    padding: 2px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.halfportion .top {
+  height: 20px;
+  background-color: #B3B9C4;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+
+}
+
+.halfportion .bottom {
+  position: relative;
+  height: 30px;
+  border: 1px solid transparent;
+  padding: 3px;
+}
+
+.halfportion .bottom .full-row {
+  padding: 2px;
+  border-radius: 5px;
+  border: 1px solid transparent;
+  background-color: #B3B9C4;
+}
+
+.halfportion .bottom .half-row {
+  margin-top: 3px;
+  padding: 2px;
+  border-radius: 5px;
+  border: 1px solid transparent;
+  background-color: #B3B9C4;
+  width: 75%;
+}
+
+.halfportion .bottom .mix-row {
+  
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.halfportion .bottom .mix-row .split-col {
+  display: flex;
+  gap: 2px;
+}
+
+.halfportion .split-col > div {
+  padding: 2px 7px;
+  border-radius: 5px;
+  border: 1px solid transparent;
+  background-color: #B3B9C4;
+}
+
+.halfportion .circle-col {
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  border: 1px solid transparent;
+  background-color: #B3B9C4;
+}
+
+.fullportion-container {
+  position: relative;
+  background-color: #9da6b6;
+  height: 100%;
+  width: 100%;
+  border-radius: inherit;
+}
+
+.fullportion .funny {
+  position: absolute;
+  left: 0;
+  right: 0;
+  padding: 1rem;
+  top: 1rem;
+}
+
+.fullportion .funny .full-row {
+  padding: 2px;
+  border-radius: 5px;
+  border: 1px solid transparent;
+  background-color: #ffffff;
+}
+
+.fullportion .funny .half-row {
+  margin-top: 3px;
+  padding: 2px;
+  border-radius: 5px;
+  border: 1px solid transparent;
+  background-color: #ffffff;
+  width: 75%;
+}
+
+
+
+  
+
+
+
+
+  .coverModal-grid.x5 {
+    grid-template-columns: repeat(5, minmax(2rem, 1fr));
+  }
+
+  .coverModal-grid.x5 .colors-item {
+    padding: 2px;
+    outline: 2px solid transparent;
+    border-radius: 5px;
+  }
+
+  .colors-item--container {
+    height: 2px;
+    padding: 1rem;
+    border-radius: inherit;
+    border: 1px solid transparent;
+  }
+
+  .colors-item--container:hover {
+    opacity: 0.86;
+    cursor: pointer;
+  }
+
+  p.xyz {
+    font-size: 0.85rem;
+    font-weight: 600;
+  }
+
+/* copy card modal */
+/* position fixed ?! */
+.rhs-row--item .copyModal,
+.rhs-row--item .moveModal {
+  position: fixed;
+  
+  width: 300px;
+ 
+  background-color: white;
+  border: 2px solid black;
+  border-radius: 7.5px;
+  z-index: 4;
+}
+.copyModal-container {
+  padding: 0.5rem;
+}
+.copyModal-row.header {
+  position: relative;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  font-weight: 600;
+  
+}
+
+.copyModal-row {
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.copyModal-row:not(.header) {
+  margin-bottom: 0.5rem;
+}
+
+.copyModal-row.header p {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.copyModal-row.input textarea {
+  width: 100%;
+  resize: none;
+  outline: none;
+  padding-left: 5px;
+  font-weight: 500;
+  letter-spacing: 1px;
+}
+
+.copyModal-row.input textarea:focus {
+  outline: 2px solid blue;
+
+}
+
+.copyModal-row.checkbox ul {
+  list-style: none;
+  padding-left: 10px;
+}
+
+.copyModal-row.checkbox ul li input[type=checkbox] {
+  accent-color: pink;
+}
+
+.copyModal-row.checkbox ul li label {
+  margin-left: 7.5px;
+  font-size: 14px;
+  line-height: 16px;
+  font-weight: normal;
+}
+
+.copyModal-row--smallText {
+  font-size: 12px;
+}
+.copyModal-row--bigText {
+  font-size: 14px;
+}
+
+.selecter-row {
+  margin-top: 0.5rem;
+}
+.selecter-row select {
+  width: 100%;
+}
+
+.selecter-row.two {
+  display: flex;
+  gap: 0.4rem;
+}
+
+.selecter-row.two .bigger {
+  flex: 1;
+}
+/* end of copy card modal */
+
+/* start of move card modal */
+
+
+.moveModal-container {
+  position: relative;
+  padding: 1rem;
+  font-size: 0.95rem;
+}
+
+.moveModal-absolute {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+}
+
+.moveModal-row.header {
+  text-align: center;
+  font-weight: 700;
+}
+
+.moveModal-row.text {
+  margin: 0.74rem 0;
+  font-weight: 700;
+  color:rgb(98, 111, 134);
+}
+
+.moveModal-row.select {
+  margin-bottom: 0.5rem;
+}
+
+.moveModal-row.select p {
+  font-weight: 600;
+  font-size: 0.85rem;
+}
+.moveModal-row.select select {
+  width: 100%;
+}
+
+.moveModal-row.select.flexed {
+  display: flex;
+  gap: 10px;
+}
+
+.moveModal-row.select.flexed .bigger {
+  flex: 1;
+}
+
+.moveModal-row.button {
+  margin-top: 10px;
+}
+.moveModal-row.button button.btn-primary {
+  padding: 0.3rem 0.9rem;
+}

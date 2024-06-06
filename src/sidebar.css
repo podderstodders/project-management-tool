@@ -1,0 +1,358 @@
+.app-sidebar {
+  position: relative;
+  /* background-color: #505f79e6; */
+  background-color: #596164;
+  min-width: 1.2rem;
+  max-width: 20rem;
+  border-right: 2px solid white;
+}
+
+.app-sidebar--openIcon {
+  position: absolute;
+  cursor: pointer;
+  z-index: 5;
+  background-color: rgba(80, 95, 121, 0.9);
+}
+
+.app-sidebar--openIcon:hover {
+  background-color: rgba(56, 63, 76, 0.356);
+}
+
+.app-sidebar--openIcon.unopened {
+  right: -1rem;
+  top: 0.5rem;
+  z-index: 5;
+  width: 30px;
+  height: 30px;
+  padding: 4px;
+  border-radius: 50%;
+  border: 1px solid rgb(148, 148, 148);
+  background-color: rgba(80, 95, 121, 0.9);
+}
+
+.app-sidebar--openMessage {
+  position: absolute;
+  white-space: nowrap;
+  background-color: rgba(72, 115, 189, 0.9);
+  padding: 0.3rem 0.6rem;
+  color: white;
+  font-size: 0.76rem;
+  top: 3.3rem;
+  left: 0.6rem;
+  z-index: 5;
+}
+
+.app-sidebar--openMessage.active {
+  top: 3.75rem;
+  left: 11rem;
+}
+
+
+.app-sidebar--openIcon.opened {
+  right: 10px;
+  top: 1.5rem;
+}
+
+
+.app-sidebar .opened .sideBar-svgCircle {
+  transform: rotate(180deg);
+}
+
+.app-sidebar--body {
+  margin-top: 1.5rem;
+}
+
+.app-sidebar--container {
+  color: white;
+  position: relative;
+}
+
+.app-sidebar-row {
+  padding-inline: 0.5rem;
+}
+
+.app-sidebar-row.header {
+
+  font-size: 1rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+
+.app-sidebar-row.item {
+  padding: 0.5rem;
+}
+
+.app-sidebar-row.item.active {
+  padding-top: 0.7rem;
+  background-color: rgba(252, 252, 252, 0.314);
+}
+
+.app-sidebar-row.item:hover {
+  background-color: #505f79e6;
+}
+
+.app-sidebar--body a.plus-svg {
+
+  color: inherit;
+  font-size: 2rem;
+  line-height: 1rem;
+  font-weight: 700;
+  border: 2px solid transparent;
+  padding: 0.3rem;
+}
+
+.app-sidebar--body a.plus-svg:hover {
+  color: white;
+  background-color: rgba(0, 0, 0, 0.343);
+  cursor: pointer;
+}
+
+.sidebar-header--actions {
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.app-sidebar--absolute.addboard,
+.app-sidebar--absolute.morecolors {
+  font-size: 0.95rem;
+  position: absolute;
+  top: 5.8rem;
+  left: 13.75rem;
+  z-index: 4;
+  background-color: white;
+  color: black;
+  border: 2px solid black;
+  border-radius: 0.75rem;
+}
+
+.app-sidebar--absolute.morecolors {
+  width: 300px;
+  top: 6rem;
+  left: calc(15.75rem + 86px);
+}
+
+
+.addboard-container {
+  padding: 0.5rem;
+  position: relative;
+}
+
+.addboard-absolute.exitbtn {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+}
+
+.addboard-row.header {
+  padding: 0.5rem 0;
+  text-align: center;
+  font-weight: 700;
+}
+
+.addboard-row.divider {
+  margin-top: 1rem;
+  margin-bottom: 0.5rem;
+  height: 2px;
+  border: 1px solid rgb(206, 206, 206);
+}
+
+.addboard-row.preview {
+  max-width: 70%;
+  margin: 0 auto;
+  margin-top: 1rem;
+}
+
+.addboard-row.preview .preview-container {
+  padding: 1rem 0.5rem;
+  background-color: #f4f4f4;
+  display: flex;
+  gap: 1rem;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+.preview-item {
+  flex: 1;
+  background-color: rgba(252, 252, 252, 0.926);
+}
+
+.preview-container .preview-item.a,
+.preview-container .preview-item.c {
+  height: 100px;
+
+}
+
+.preview-container .preview-item.b {
+  height: 70px;
+
+}
+
+.addboard-row.input label {
+  font-weight: 700;
+  font-size: 0.85rem;
+}
+
+.addboard-row.input label::after {
+  content: ' *';
+  color: red;
+}
+
+.addboard-row.input input {
+  width: 100%;
+}
+
+.addboard-row.input {
+  margin-bottom: 0.5rem;
+}
+
+
+.addboard-row.colors {
+  margin-top: 0.75rem;
+  margin-bottom: 0.75rem;
+  font-weight: 700;
+  font-size: 0.85rem;
+}
+
+.addboard-row.button button {
+  width: 100%;
+}
+
+.addboard-row.button button.disabled {
+  background-color: #ebebeb;
+  color: #909090;
+  border: 1px solid transparent;
+  outline: none;
+  cursor: not-allowed;
+}
+
+
+.colors-container .grid6x {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(50px, 1fr));
+  gap: 5px;
+}
+
+.grid6x>div {
+  position: relative;
+  cursor: pointer;
+  padding: 0.5rem;
+  border-radius: 5px;
+}
+
+.colors-row--item.selected {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.colors-row--add:hover {
+  background-color: #bebebee6;
+  cursor: pointer;
+}
+
+
+
+.colors-container {
+  margin-top: 5px;
+}
+
+
+.colormodal-container {
+  position: relative;
+  padding: 1rem;
+}
+
+.colormodal-selection-row.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.colormodal-selection-row.header p {
+  font-weight: 700;
+}
+
+.colormodal-selection-row.grid3x {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(50px, 1fr));
+  gap: 0.75rem;
+}
+
+.colormodal-selection-row.grid3x>div {
+  position: relative;
+  padding: 1.5rem;
+  border: 1px solid transparent;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.xyz-absolute {
+  display: none;
+  position: absolute;
+  z-index: 3;
+  top: 3.2rem;
+  left: 1rem;
+  padding: 5px 10px;
+  background-color: #000000f9;
+}
+
+.colormodal-selection-row.grid3x>div:hover .xyz-absolute {
+  display: block;
+  
+}
+
+.colormodal-row.header {
+  text-align: center;
+  font-weight: 600;
+}
+.colormodal-absolute--btn.left {
+  position: absolute;
+  top: 0.5rem;
+  left: 0.5rem;
+}
+.colormodal-absolute--btn.right {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+}
+
+.colormodal-row.selection {
+  margin: 1rem 0;
+}
+
+.moreview-row {
+  margin-top: 0.5rem;
+}
+
+.moreview-row p {
+  font-weight: 700;
+  margin-bottom: 3px;
+}
+
+.moreview-items {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(50px, 1fr));
+  gap: 0.5rem;
+}
+
+.moreview-item {
+  position: relative;
+  padding: 1.5rem;
+}
+
+.vbc123 {
+  display: none;
+  position: absolute;
+  top: 3.2rem;
+  left: 1.5rem;
+  background-color: black;
+  padding: 10px;
+  color: white;
+  z-index: 7;
+}
+
+.moreview-item:hover .vbc123 {
+  display: block;
+}

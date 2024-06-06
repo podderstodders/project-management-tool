@@ -1,0 +1,232 @@
+.checklist {
+    padding: 1rem;
+  }
+
+
+  .checklist-rowgrid {
+    display: grid;
+    grid-template-columns: 2rem 1fr;
+    gap: 1em;
+  }
+  
+  .checklist-rowgrid--lhs {
+    display: flex;
+    justify-content: center;
+   
+    
+  }
+  
+  .checklist-rowgrid--lhs.checkboxInput {
+  
+  align-items: flex-start;
+  
+  }
+  
+  .checklist-rowgrid--lhs.checkboxInput input[type=checkbox] {
+    align-self: flex-start;
+  }
+  
+  .checklist-rowgrid--lhs input[type=checkbox] {
+    width: 1.75rem;
+    height: 1.75rem;
+  }
+  
+  
+  
+  .checklist-rowgrid--rhs {
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    
+  
+  }
+  .checklist-rowgrid.entry {
+    margin: 0.5rem 0;
+  }
+  
+  .checklist-rowgrid--rhs span#hoverableSpan12 {
+    display: block;
+    width: 100%;
+    font-size: 1rem;
+    padding: 0.3rem 0;
+    padding-left: 0.5rem;
+    border: 1px solid transparent;
+    border-radius: 0.5rem;
+  } 
+  
+  .checklist-rowgrid--rhs span#hoverableSpan12:hover {
+    background-color: rgb(228, 228, 228);
+    cursor: pointer;
+  }
+  
+  .checklist-rowgrid--rhs span.checked {
+    text-decoration: line-through;
+  }
+  
+  .checklist-rowgrid--rhs p.lighter {
+    color: rgba(0, 0, 0, 0.696);
+  }
+  
+  .checklist-rowgrid--rhs .flexed {
+  
+    display: flex;
+    gap: 1em;
+    align-items: center;
+  }
+  
+  
+  .checklist-absolute--deleteModal {
+    position: absolute;
+    top: 3.5rem;
+    right: -12.5rem;
+    
+    z-index: 2;
+  }
+  
+  .deleteModal-container {
+    position: relative;
+    width: 300px;
+    padding: 1rem;
+    background-color: white;
+    border-radius: 10px;
+    border: 1px solid transparent;
+    box-shadow: rgba(97, 8, 42, 0.25) 0px 30px 60px -12px inset, rgba(0, 0, 0, 0.3) 0px 18px 36px -18px inset;
+    text-align: center;
+  }
+  
+  .deleteModal-container h4 {
+    text-align: center;
+  }
+  
+  .deleteModal-container p {
+    text-align: start;
+    margin: 1rem 0;
+  }
+  
+  .deleteModal-container button.absolute {
+    position: absolute;
+    top: 0;
+    right: 0;
+  }
+  
+  /* single check item hover over state */
+  .checklist-rowgrid--rhs.singleChecklistItem {
+    position: relative;
+    width: 100%;
+  
+  }
+  
+  
+  
+  .singleCheckListItem-absolute {
+  
+    position: absolute;
+    top: 0;
+    height: 100%;
+    right: 1rem;
+  
+    display: grid;
+    place-content: center;
+  }
+  
+  .singleCheckListItem-absolute--container {
+    display: flex;
+    gap: 1em;
+  }
+  
+  
+  a.singleChecklistItem-input {
+    display: block;
+    width: 100%;
+    border-radius: 1rem;
+    border: 1px solid transparent;
+    outline: none;
+    height: 2.5rem;
+    display: flex;
+    align-items: center;
+  }
+  
+  a.singleChecklistItem-input span {
+    padding-left: 5px;
+  }
+  
+  
+  
+  .singleChecklistItem-input:hover {
+    border: 1px solid #ccc;
+  }
+  
+  input[type=text].singleChecklistItem-input:hover + .singleCheckListItem-absolute {
+    opacity: 1;
+  }
+  
+  .rowgrid-rhs--absolute__btn button {
+    background-color: transparent;
+    padding: 5px;
+  }
+  
+  
+  
+  
+  .checklistAddInput {
+    background-color: rgb(241, 241, 241);
+    width: 100%;
+    padding: 0.5rem 0.75rem;
+  }
+  
+  .checklistAddInput .textarea {
+    margin-top: 0.5rem;
+    
+  }
+  
+  .checklistAddInput .textarea textarea {
+    resize: none;
+    width: 100%;
+    
+    outline: none;
+    border: 3px solid rgb(0, 110, 255);
+    border-radius: 7.5px;
+    padding: 0.5rem 0.8rem;
+  }
+  
+  
+  .checklistAddInput .actions {
+    margin: 0.5rem 0;
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  .checklistAddInput .actions .flexed {
+    display: flex;
+    gap: 1em;
+    justify-content: center;
+  }
+  
+  /* health */
+  .checklist-health {
+    display: grid;
+    width: 100%;
+    border-radius: 1rem;
+    background-color: rgb(228, 228, 228);;
+  }
+  
+  .checklist-health--container {
+    width: 0;
+    height: 100%;
+    background-color: rgb(255, 0, 98);
+    border-radius: 1rem;
+    transition: width 0.6s ease;
+  }
+  
+  .healthbar:last-of-type {
+    border-right: none;
+  }
+  
+  
+  .checklist-rowgrid.addBtn {
+    margin-top: 1em;
+  }
+  
+  .checklist-rowgrid.health {
+    margin-top: 1rem;
+  }
