@@ -3,11 +3,9 @@ import { cardProps } from "../../@types/board"
 import { UseBoardContext } from "../../context/boardcontext"
 type cardModalInputElementProps = {
     card: cardProps,
-    parentListName: string
-    boardName: string
   }
   
-export const CardModalTitleInput: React.FC<cardModalInputElementProps> = ({ card, parentListName, boardName}) => {
+export const CardModalTitleInput: React.FC<cardModalInputElementProps> = ({ card}) => {
     const {dispatch} = UseBoardContext() 
     const [cardTitle, setCardTitle] = useState('')
     const cardTitleHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -23,7 +21,7 @@ export const CardModalTitleInput: React.FC<cardModalInputElementProps> = ({ card
             setCardTitle(card.title)
         }else {
             const newCard = {...card, title: cardTitle} as cardProps
-            dispatch({type: 'UPDATE_CARD', payload: {boardName, listName: parentListName, card: newCard}})
+            dispatch({type: 'UPDATE_CARD', payload: newCard})
         }
     }
 
@@ -36,7 +34,7 @@ export const CardModalTitleInput: React.FC<cardModalInputElementProps> = ({ card
   }
 
 
-  export const CardModalDescriptionInput: React.FC<cardModalInputElementProps> = ({ card, parentListName, boardName}) => {
+  export const CardModalDescriptionInput: React.FC<cardModalInputElementProps> = ({ card}) => {
     const {dispatch} = UseBoardContext() 
     const [cardDescription, setCardDescription] = useState('')
 
@@ -55,7 +53,7 @@ export const CardModalTitleInput: React.FC<cardModalInputElementProps> = ({ card
         }else {
             console.log('change to description, so an update happened')
             const newCard = {...card, description: cardDescription} as cardProps
-            dispatch({type: 'UPDATE_CARD', payload: {boardName, listName: parentListName, card: newCard}})
+            dispatch({type: 'UPDATE_CARD', payload: newCard})
         }
     }
 

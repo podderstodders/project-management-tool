@@ -1,9 +1,11 @@
 import { boardColors } from "../../data/colors"
 import { useState } from "react"
 import { BoardColorModal } from "./BoardColorModal";
-import { boardColorProps, boardProps } from "../../@types/board";
+import { boardColorProps } from "../../@types/board";
+import { UseBoardContext } from "../../context/boardcontext";
 
 type addBoardModalProps = {
+    addNewBoard: (boardName: string, colors: boardColorProps) => Promise<void>;
     closeHandler: () => void;
 }
 
@@ -14,7 +16,9 @@ const defaultBoardColorState = {
     emoji: '',
 } as boardColorProps
 
-export const AddBoardModal: React.FC<addBoardModalProps> = ({ closeHandler}) => {
+export const AddBoardModal: React.FC<addBoardModalProps> = ({ closeHandler, addNewBoard}) => {
+    const {state} = UseBoardContext() 
+
     const firstFive = boardColors.slice(0, 5)
     const [boardTitle, setBoardTitle] = useState('')
     const [previewGradient, setPreviewGradient] = useState(defaultBoardColorState)
@@ -30,14 +34,7 @@ export const AddBoardModal: React.FC<addBoardModalProps> = ({ closeHandler}) => 
 
     const addBoard = () => {
        if(boardTitle.length > 0 && previewGradient.primary.length > 0) {
-            const newBoard: boardProps = {
-                boardName: boardTitle, 
-                isFavorite: false, 
-                description: '', 
-                isWatching: false, 
-                lists: [],
-                boardColor: previewGradient
-            }
+            addNewBoard(boardTitle, previewGradient)
        }
     }
 
@@ -99,7 +96,7 @@ export const AddBoardModal: React.FC<addBoardModalProps> = ({ closeHandler}) => 
                 </div>
             
                 <div className="addboard-row button">
-                    <button className={`btn-darker ${boardTitle.length === 0 ? 'disabled' : undefined}`}>Create</button>
+                    <button className={`btn-darker ${boardTitle.length === 0 || state.isAddBoardHappening ? 'disabled' : undefined}`} onClick={addBoard}>Create</button>
                 </div>
             </div>
         </div>

@@ -17,25 +17,25 @@ type cardViewModalProps = {
     closeHandler: () => void,
 }
 
-const findCardById = (board: boardProps | null, cardId: number): cardProps | undefined => {
-  if(!board){
-    return undefined
-  }
+
+
+const findCardById = (board: boardProps, cardId: number): cardProps | undefined=> {
 
   const lists = board.lists
   for(const list of lists){
     const card = list.items.find( (card) => card.id === cardId) 
     if(card) {
-      return card
+      return card 
     }
   }
-  return undefined; 
+  return undefined
 }
 
 
 export const CardViewModal: React.FC<cardViewModalProps> = ({isActive, cardId, closeHandler}) => {
-    const {state, dispatch} = UseBoardContext() 
+    const {state, dispatch} = UseBoardContext()  
     const card = findCardById(state.currentBoard, cardId)
+    
     const [isWatching, setIsWatching] = useState(false)
     const [labelMenuToggler, setLabelMenuToggler] = useState({
       active: false, 
@@ -73,12 +73,12 @@ export const CardViewModal: React.FC<cardViewModalProps> = ({isActive, cardId, c
     const isWatchingHandler = () => {
       if(!isWatching) {
         const updatedCard = {...card, isWatching: true} as cardProps
-        dispatch({type: 'UPDATE_CARD', payload: {boardName: boardName, listName: parentListName, card: updatedCard}})
+        dispatch({type: 'UPDATE_CARD', payload: updatedCard})
         setIsWatching(true)
       } else {
         //currently true 
         const updatedCard = {...card, isWatching: false} as cardProps
-        dispatch({type: 'UPDATE_CARD', payload: {boardName: boardName, listName: parentListName, card: updatedCard}})
+        dispatch({type: 'UPDATE_CARD', payload: updatedCard})
         setIsWatching(false)
       }
     }
@@ -92,8 +92,8 @@ export const CardViewModal: React.FC<cardViewModalProps> = ({isActive, cardId, c
       })
     }, [])
    
-    if(isActive && card) {
-        console.log(card)
+    if(isActive && card !== undefined) {
+ 
         return (
             <div className="app-absolute--item">
               <div className="absoluteItem-container">
@@ -104,7 +104,7 @@ export const CardViewModal: React.FC<cardViewModalProps> = ({isActive, cardId, c
                   && 
                   <div className="cardcover" style={{backgroundColor: card.coverProperties?.colorCode ?? 'none'}}>
                     <div className="cover-absolute--btn">
-                        <CoverFeature card={card} boardName={boardName} parentListName={parentListName} isCool={false}/>
+                        <CoverFeature card={card} isCool={false}/>
                     </div>
                   </div>
                  }
@@ -117,10 +117,10 @@ export const CardViewModal: React.FC<cardViewModalProps> = ({isActive, cardId, c
                           </svg>
                         </div>
                         <div className="lhs-item--text">
-                            <CardModalTitleInput card={card} parentListName={parentListName} boardName={boardName}/>
+                            <CardModalTitleInput card={card}/>
                             <div className="lhs-item--textblock">
                               <div>in list</div>
-                              <div style={{textDecoration: 'underline'}}>{parentListName}</div>
+                              <div style={{textDecoration: 'underline'}}>yomoms</div>
                               {
                                 card.isWatching 
                                 && 
@@ -165,7 +165,7 @@ export const CardViewModal: React.FC<cardViewModalProps> = ({isActive, cardId, c
                                 && 
                                 labelMenuToggler.index !== 96 
                                 && 
-                                <LabelsMenu card={card} boardName={boardName} parentListName={parentListName} parentCloseHandler={() => setLabelMenuToggler({active: false, index: -1})}/>
+                                <LabelsMenu card={card} parentCloseHandler={() => setLabelMenuToggler({active: false, index: -1})}/>
                               }
                             </div> 
                             : 
@@ -219,7 +219,7 @@ export const CardViewModal: React.FC<cardViewModalProps> = ({isActive, cardId, c
                         </div>
                         <div className="description-container">
                             <h3>Description</h3>
-                            <CardModalDescriptionInput card={card} boardName={boardName} parentListName={parentListName}/>
+                            <CardModalDescriptionInput card={card}/>
                         </div>
                       </div>
                       {
@@ -228,7 +228,7 @@ export const CardViewModal: React.FC<cardViewModalProps> = ({isActive, cardId, c
                         card.checklists.length > 0 
                         && 
                         card.checklists.map( (checklist) => (
-                          <TheCheckList checklistId={checklist.checklistId} title={checklist.title} card={card} boardName={boardName} parentListName={parentListName}/>
+                          <TheCheckList checklistId={checklist.checklistId} title={checklist.title} card={card}/>
                         ))
                       }
                       <div className="lhs-row activity"></div>
@@ -265,11 +265,11 @@ export const CardViewModal: React.FC<cardViewModalProps> = ({isActive, cardId, c
                                 && 
                                 labelMenuToggler.index === 96 
                                 && 
-                                <LabelsMenu card={card} boardName={boardName} parentListName={parentListName} parentCloseHandler={() => setLabelMenuToggler({active: false, index: -1})}/>
+                                <LabelsMenu card={card}  parentCloseHandler={() => setLabelMenuToggler({active: false, index: -1})}/>
                               }
                             </div>
       
-                            <CheckListMenu card={card} boardName={boardName} parentListName={parentListName}/>
+                            <CheckListMenu card={card}/>
       
                             {/* <div className="rhs-row--item">
                               <a className="btn-darker">
@@ -295,7 +295,7 @@ export const CardViewModal: React.FC<cardViewModalProps> = ({isActive, cardId, c
                             </div> */}
       
                             {
-                              !card.coverProperties && <CoverFeature card={card} boardName={boardName} parentListName={parentListName} isCool={true}/>
+                              !card.coverProperties && <CoverFeature card={card} isCool={true}/>
                             }
                           
                           </div>
@@ -305,7 +305,7 @@ export const CardViewModal: React.FC<cardViewModalProps> = ({isActive, cardId, c
                           <div className="rhs-row--header">Actions</div>
                           <div className="rhs-row--items">
                             <MoveCardModal />
-                            <CopyCardModal card={card} boardName={boardName} parentListName={parentListName}/>
+                            <CopyCardModal card={card}/>
       
                             <div className="rhs-row--item">
                               <a className="btn-darker">

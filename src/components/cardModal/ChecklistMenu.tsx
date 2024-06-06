@@ -4,11 +4,9 @@ import { UseBoardContext } from '../../context/boardcontext'
 
 type checkListMenuProps = {
     card: cardProps
-    boardName: string
-    parentListName: string
 }
 
-export const CheckListMenu: React.FC<checkListMenuProps> = ({card, boardName, parentListName}) => {
+export const CheckListMenu: React.FC<checkListMenuProps> = ({card}) => {
     const {dispatch} = UseBoardContext()
     const [checkListMenuToggle, setCheckListMenuToggle] = useState(false)
     const [title, setTitle] = useState('')
@@ -26,7 +24,7 @@ export const CheckListMenu: React.FC<checkListMenuProps> = ({card, boardName, pa
             title: title
         } as checkListProps
         checkListArray.push(newCheckList) 
-        dispatch({type: 'UPDATE_CARD', payload: {boardName: boardName, listName: parentListName, card: {...card, checklists: checkListArray}}})
+        dispatch({type: 'UPDATE_CARD', payload: {...card, checklists: checkListArray}})
         setCheckListMenuToggle(false)
         setTitle('')
        }

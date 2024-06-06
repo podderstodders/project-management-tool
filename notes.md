@@ -308,3 +308,59 @@ more refactoring. with my current setup, I dont think i would be able to acheive
 
 i think the best approach would be to add more properties to context.one of them being the current board. This would simplify  all my reducer functions as i dont need to loop through the board, i can just update the current board. 
 
+June 6, 4:38AM 
+Sequence of events: 
+
+1. the user clicks on the sidebar 
+
+2. the user clicks on the plus button within the sidebar, which will toggle a NewBoard modal. 
+
+3. the user fills out the input title and select a color. 
+
+4. The user clicks on the add button. 
+
+Effects: 
+
+1. Upon clicking the add button, the add button css will become muted, and the cursor property becomes 'not allowed'. 
+	- this is happening within the AddBoardModal, so i can have a 
+	- or i add a context of 'isAddBoardHappening': boolean, 
+	and within my addBoardModal, i can check if that context is true, then set the button to be muted; -- have a css property for it. 
+const addBoardHandler = () => {
+	dispatch(type: 'setBoardLoading': true)
+
+}
+	
+	
+2. 1-2 seconds goes by, and all of the sidebar's children modals that are active will be toggled off. 
+const addBoardHandler = () => {
+	dispatch(type: 'setBoardLoading': true)
+	setTimeout( () => {
+		sidebarToggleHandler() 
+		dispatch( type: 'setBoadingLoading': false) 
+	}, 2000)
+	
+	dispatch({type: 'update current board' payload: {boardName: 'name123'}) 
+	await delay(50) 
+	dispatch({type: 'update current board' payload: {boardItems: []}) 
+	await delay(50) 
+	dispatch({type: 'update current board' payload: {gradient: 'gradient'}) 
+}
+
+3. The header changes color, followed by a slighty delay and the sidebar changes color.
+	dispatch({colors: primary})
+	delay(20)
+	dispatch({secondary})
+
+4. The main part of the app, while still showing the old board and old title, the title will first change to the new board's title, followed by the board's list. Since its a brand new list, all of the old list will disppear from the screen leaving just one empty list. Lastly, the background gradient will fade in. 
+	dispatch({type: 'update current board' payload: {boardName: 'name123'}) 
+	await delay(50) 
+	dispatch({type: 'update current board' payload: {boardItems: []}) 
+	await delay(50) 
+	dispatch({type: 'update current board' payload: {gradient: 'gradient'}) 
+	
+	setTime( () => {
+	then two dispatch to update the global board, and another dispatch to set the current board 
+	so that the sidebar gets the final touches 
+	}, 50)
+
+5. The sidebar renders out a list of boards that user can choose. After the main screen is changed, the sidebar will be updated with the new board, as well as making the new board the current active board. 

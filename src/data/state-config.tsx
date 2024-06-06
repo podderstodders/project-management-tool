@@ -110,7 +110,8 @@ export const initialTrelloState = [
           }
         ]
       }
-    ]
+    ],
+    "boardColor": { primary: "#7647a3", secondary: "#E4EfE9", gradient: "linear-gradient(to right bottom, #7647a3, #7a8389, #6f787d, #646c70, #596164)", emoji: "🔮" },
   },
   {
     "boardName": "Project Beta",

@@ -2,11 +2,10 @@ import { useState } from "react"
 import { UseBoardContext } from "../../context/boardcontext"
 
 type listFooterProps = {
-    boardName: string
     listName: string,
     formToggle: boolean
 }
-export const ListFooter: React.FC<listFooterProps> = ({boardName, listName, formToggle}) => {
+export const ListFooter: React.FC<listFooterProps> = ({listName}) => {
 const {dispatch} = UseBoardContext() 
 
 const [cardTitle, setCardTitle] = useState('')
@@ -16,7 +15,7 @@ const textAreaHandler = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
 }
 const submitHandler = () => {
     if(cardTitle.length > 0){
-        dispatch({type: 'ADD_CARD', payload: {boardName, listName, cardTitle: cardTitle}})
+        dispatch({type: 'ADD_CARD', payload: { listName, cardTitle: cardTitle}})
         setCardTitle('')
         setIsUp(false)
     }

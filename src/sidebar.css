@@ -5,6 +5,7 @@
   min-width: 1.2rem;
   max-width: 20rem;
   border-right: 2px solid white;
+  transition: background-color 0.5s ease-in;
 }
 
 .app-sidebar--openIcon {

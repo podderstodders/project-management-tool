@@ -82,8 +82,6 @@ const DefaultLabels = (labels: cardLabelProps[]): cardLabelProps[] => {
 
 type labelMenuProps = {
     card: cardProps
-    boardName: string
-    parentListName: string
     parentCloseHandler: () => void
 }
 
@@ -91,7 +89,7 @@ type labelMenuProps = {
 //that was checked, in this case we need to dispatch from here. 
 
 
-export const LabelsMenu: React.FC<labelMenuProps> = ({card, parentCloseHandler, boardName, parentListName}) => {
+export const LabelsMenu: React.FC<labelMenuProps> = ({card, parentCloseHandler}) => {
     const {dispatch} = UseBoardContext()
     const [activeLabels, setActiveLabels] = useState<cardLabelProps[]>([])
     const [createLabel, setCreateLabel] = useState(false)
@@ -111,7 +109,7 @@ export const LabelsMenu: React.FC<labelMenuProps> = ({card, parentCloseHandler, 
         const updatedActiveLabels = activeLabels.map( (label) => label.labelIndex === labelIndex ? {...label, labelIsChecked: status} : label)
         setActiveLabels(updatedActiveLabels) 
         const updatedCard = {...card, labels: updatedActiveLabels}
-        dispatch({type: 'UPDATE_CARD', payload: {boardName: boardName, listName: parentListName, card: updatedCard}})
+        dispatch({type: 'UPDATE_CARD', payload: updatedCard})
     }
 
     const createNewLabelHandler = (title: string, name: string, code: string) => {
@@ -126,7 +124,7 @@ export const LabelsMenu: React.FC<labelMenuProps> = ({card, parentCloseHandler, 
         updatedLabels.push(newLabel)
         setActiveLabels(updatedLabels)
         const updatedCard = {...card, labels: updatedLabels} 
-        dispatch({type: 'UPDATE_CARD', payload: {boardName: boardName, listName: parentListName, card: updatedCard}})
+        dispatch({type: 'UPDATE_CARD', payload: updatedCard})
         setCreateLabel(false)
     }
 
@@ -134,7 +132,7 @@ export const LabelsMenu: React.FC<labelMenuProps> = ({card, parentCloseHandler, 
         const updatedActiveLabels = activeLabels.map( (lab) => lab.labelIndex === label.labelIndex ? label : lab )
         setActiveLabels(updatedActiveLabels)
         const updatedCard = {...card, labels: card.labels.map( (lab) => lab.labelIndex === label.labelIndex ? label : lab )}
-        dispatch({type: 'UPDATE_CARD', payload: {boardName: boardName, listName: parentListName, card: updatedCard}})
+        dispatch({type: 'UPDATE_CARD', payload: updatedCard})
         setEditLabel({
             active: false,
             index: -1

@@ -10,7 +10,9 @@ import { SidebarBoardContainer } from './components/sidebar/BoardItem'
 import { CurrentBoardContainer } from './components/Board/BoardContainer'
 import { AddBoardModal } from './components/sidebar/AddBoardModal'
 import { UseBoardContext } from './context/boardcontext'
+import { boardColorProps, boardProps } from './@types/board'
 
+const defaultBoardColorState: boardColorProps = { primary: "#0035cc", secondary: "#92EFFD", gradient: "linear-gradient(to right bottom, #0035cc, #0093ff, #00b7ff, #20d5ff, #92effd)", emoji: "🌌" };
 
 function App() {
   const {state, dispatch} = UseBoardContext() 
@@ -19,10 +21,11 @@ function App() {
   const [sidebarInstructionToggle, setSidebarInstructionToggle] = useState(false)
   const [newBoardToggle, setNewBoardToggle] = useState(false)
  
-  const changeBoard = (str: string) => {
-    const theBoard = state.boards.find( (board) => board.boardName === str)
+  const changeBoard = (boardname: string) => {
+    const theBoard = state.boards.find( (board) => board.boardName === boardname)
     if(theBoard){
       dispatch({type: 'UPDATE_CURRENT_BOARD', payload: theBoard})
+      dispatch({type: 'UPDATE_COLORS', payload: theBoard.boardColor ?? defaultBoardColorState})
     }
   }
   const sidebarToggleHandler = () => {
@@ -36,10 +39,37 @@ function App() {
       setSidebarToggle(true)
     }
   }
-  // const delay = (ms: number) => new Promise( resolve => setTimeout(resolve, ms))
-  // const addNewBoardHandler = () => {
+   const delay = (ms: number) => new Promise( resolve => setTimeout(resolve, ms))
+  const addNewBoardHandler = async (boardName: string, colors: boardColorProps) => {
+
+    dispatch({type: 'UPDATE_HAPPENING', payload: true})
+    await delay(2000);
+    dispatch({type: 'UPDATE_HAPPENING', payload: false})
+    setNewBoardToggle(false)
     
-  // }
+    await delay(300) 
+    dispatch({type: 'UPDATE_COLOR_HEADER', payload: colors.primary})
+    await delay(50) 
+    dispatch({type: 'UPDATE_COLOR_ASIDE', payload: colors.primary})
+    await delay(40) 
+    dispatch({type: 'UPDATE_BG_GRADIENT', payload: colors.gradient})
+    //effect 4 
+  
+    dispatch({type: 'UPDATE_CURRENT_BOARD', payload: {...state.currentBoard, boardName: boardName}})
+
+    //lastly, a dispatch to update the global board 
+    const newBoard: boardProps = {
+      boardName, 
+      isFavorite: false, 
+      description: '',
+      isWatching: false,
+      lists: [],
+      boardColor: colors
+    }
+    dispatch({type: 'ADD_BOARD', payload: newBoard}) 
+    await delay(400)
+    dispatch({type: 'UPDATE_CURRENT_BOARD', payload: newBoard})
+  }
   useEffect( () => {
 
     if(sidebarInstructionToggle) {
@@ -57,9 +87,9 @@ function App() {
   
   return (
     <>
-        <header className="app-header"></header>
+        <header className="app-header" style={{backgroundColor: state.colors.headerColor}}></header>
         <main className="app">
-          <aside className="app-sidebar"  style={{width: sidebarToggle ? '17.5rem' : '1.2rem', transition: sidebarToggle ? 'width 0.5s ease' : 'width 0.3s ease-out', cursor: !sidebarToggle ? 'pointer' : ''}} onClick={!sidebarToggle ? () => setSidebarToggle(true) : undefined}>
+          <aside className="app-sidebar"  style={{width: sidebarToggle ? '17.5rem' : '1.2rem', transition: sidebarToggle ? 'width 0.5s ease' : 'width 0.3s ease-out', cursor: !sidebarToggle ? 'pointer' : '', backgroundColor: state.colors.asideColor}} onClick={!sidebarToggle ? () => setSidebarToggle(true) : undefined}>
             <div className={`app-sidebar--openIcon ${sidebarToggle ? 'opened' : 'unopened'}`} onClick={sidebarToggleHandler} onMouseEnter={() => setSidebarInstructionToggle(true)} onMouseLeave={() => setSidebarInstructionToggle(false)}>
               <svg className="sideBar-svgCircle" width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M10 7L15 12L10 17" stroke="#ffffff" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"/>
@@ -85,7 +115,7 @@ function App() {
               {
                 newBoardToggle
                 && 
-                <AddBoardModal  closeHandler={() => setNewBoardToggle(false)}/>
+                <AddBoardModal  addNewBoard={addNewBoardHandler} closeHandler={() => setNewBoardToggle(false)}/>
               }
               
             </div>

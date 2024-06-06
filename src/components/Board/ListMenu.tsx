@@ -112,7 +112,7 @@ export const ListActionMenu: React.FC<listActionMenuProps> = ({boardName, list, 
                   const board = state.boards.find( (board) => board.boardName === boardName)
                   if(board) {
                     const lists = moveListInPlace(board.lists, listIndex, moveListVals.position)
-                    dispatch({type: 'UPDATE_LISTS', payload: {boardName: boardName, lists}})
+                    dispatch({type: 'UPDATE_LISTS', payload:  lists})
                   }
                   parentCloseHandler()
                   setMoveListVals({boardName: list.listName, position: -1})
@@ -141,7 +141,7 @@ export const ListActionMenu: React.FC<listActionMenuProps> = ({boardName, list, 
                         return lll
                     }
                 })
-                dispatch({type: "UPDATE_LISTS", payload: {boardName: boardName, lists: theList}})
+                dispatch({type: "UPDATE_LISTS", payload: theList})
                 parentCloseHandler()
                 const inlineMessage = <span>Moving all items from <span className="underlined">{list.listName}</span> to <span className="green underlined">{str}</span></span>
                 setNotification(inlineMessage)

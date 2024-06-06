@@ -1,9 +1,5 @@
 import { useState } from "react"
 
-
-type moveCardModalProps = {
-
-}
 export const MoveCardModal = () => {
     const [moveCardToggle, setMoveCardToggle] = useState(false)
     return (

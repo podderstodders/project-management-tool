@@ -2,19 +2,17 @@ import { useState } from "react"
 import { cardProps } from "../../@types/board"
 type copyCardModalProps = {
     card: cardProps,
-    boardName: string,
-    parentListName: string
 }
 
-type copyCardModalDataType = {
-    title: string, 
-    keepLabels?: boolean 
-    keepChecklists?: boolean 
-    destinationBoard: string 
-    destinationList: string 
-    listPosition: number 
-}
-export const CopyCardModal: React.FC<copyCardModalProps> = ({card, boardName, parentListName}) => {
+// type copyCardModalDataType = {
+//     title: string, 
+//     keepLabels?: boolean 
+//     keepChecklists?: boolean 
+//     destinationBoard: string 
+//     destinationList: string 
+//     listPosition: number 
+// }
+export const CopyCardModal: React.FC<copyCardModalProps> = () => {
     const [cardModalToggle, setCardModalToggle] = useState(false)
     return (
         <div className="rhs-row--item">

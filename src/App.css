@@ -66,6 +66,7 @@ padding: 1rem;
 width: 100%;
 overflow: scroll;
 background-color: #505f79be;
+transition: background-image 0.5s ease;
 }
 
 .list-container {

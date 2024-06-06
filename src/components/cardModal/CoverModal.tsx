@@ -25,8 +25,6 @@ const coverColors = {
 
 type coverModalProps = {
     card: cardProps
-    boardName: string
-    parentListName: string
     isCool: boolean 
 }
 
@@ -36,7 +34,7 @@ const defaultCoverProps = {
     colorCode: '',
     size: 'half'
 } as coverPropertiesProps
-export const CoverFeature: React.FC<coverModalProps> = ({card, boardName, parentListName, isCool}) => {
+export const CoverFeature: React.FC<coverModalProps> = ({card, isCool}) => {
     const {dispatch} = UseBoardContext()
     const [coverToggle, setCoverToggle] = useState(false)
     const colors = convertColorListToArray(coverColors)
@@ -54,11 +52,8 @@ export const CoverFeature: React.FC<coverModalProps> = ({card, boardName, parent
                 const updatedCard = {...card, coverProperties: updatedCoverProps}
                 dispatch({
                     type: 'UPDATE_CARD',
-                    payload: {
-                        boardName,
-                        listName: parentListName,
-                        card: updatedCard
-                    }
+                    payload: updatedCard
+             
                 })
                 return updatedCoverProps as coverPropertiesProps
             }) 
@@ -76,13 +71,13 @@ export const CoverFeature: React.FC<coverModalProps> = ({card, boardName, parent
         console.log(newCard)
         setCoverProps(newCard.coverProperties)
         //call dispatch function to update card 
-        dispatch({type: 'UPDATE_CARD', payload: {boardName: boardName, listName: parentListName, card: newCard}})
+        dispatch({type: 'UPDATE_CARD', payload: newCard})
     }
     const removeCoverPropsHandler = () => {
         if(coverProps.isActive){
             const updatedCard = {...card}
             updatedCard.coverProperties = undefined
-            dispatch({type: 'UPDATE_CARD', payload: {boardName: boardName, listName: parentListName, card: updatedCard}})
+            dispatch({type: 'UPDATE_CARD', payload:updatedCard})
             setCoverProps(defaultCoverProps)
         }
     }

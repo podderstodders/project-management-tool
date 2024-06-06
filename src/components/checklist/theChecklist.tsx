@@ -22,14 +22,12 @@ const removeArrayItemByIndex = (id: number, arr: number[]) => {
 type theCheckListProps = {
   checklistId: number
   card: cardProps,
-  boardName: string
-  parentListName: string
   title: string 
 }
 
 
 //does it really need all of  this informaiton 
-export const TheCheckList: React.FC<theCheckListProps> = ({checklistId, card, boardName, parentListName, title}) => {
+export const TheCheckList: React.FC<theCheckListProps> = ({checklistId, card, title}) => {
     const {dispatch} = UseBoardContext() 
     //algo stuff
     const [list, setList] = useState<Array<checkListItemProps>>([])
@@ -89,7 +87,7 @@ export const TheCheckList: React.FC<theCheckListProps> = ({checklistId, card, bo
                                                     ]
                                       }
         //dispatch 
-        dispatch({type: 'UPDATE_CARD', payload: {boardName: boardName, listName: parentListName, card: updatedCard}})
+        dispatch({type: 'UPDATE_CARD', payload: updatedCard})
     }
 
     const editItemHandler = (index: number, newValue: string) => {
@@ -117,7 +115,7 @@ export const TheCheckList: React.FC<theCheckListProps> = ({checklistId, card, bo
                           checklist
                         )
           }
-          dispatch({type: 'UPDATE_CARD', payload: {boardName: boardName, listName: parentListName, card: updatedCard}})
+          dispatch({type: 'UPDATE_CARD', payload: updatedCard})
         }
       }
 
@@ -153,7 +151,7 @@ export const TheCheckList: React.FC<theCheckListProps> = ({checklistId, card, bo
                         checklist
                       )   
         }
-        dispatch({type: 'UPDATE_CARD', payload: {boardName: boardName, listName: parentListName, card: updatedCard}})
+        dispatch({type: 'UPDATE_CARD', payload: updatedCard})
 
       }
 
@@ -190,7 +188,7 @@ export const TheCheckList: React.FC<theCheckListProps> = ({checklistId, card, bo
                         checklist
                       )   
         }
-        dispatch({type: 'UPDATE_CARD', payload: {boardName: boardName, listName: parentListName, card: updatedCard}})
+        dispatch({type: 'UPDATE_CARD', payload: updatedCard})
       }
 
     const clearListHandler = () => {
@@ -200,14 +198,14 @@ export const TheCheckList: React.FC<theCheckListProps> = ({checklistId, card, bo
             setcheckboxes(new Set())
         }
         const updatedChecklist = card.checklists!.map( (checklist) => checklist.checklistId === checklistId ? {...checklist, items: undefined} : checklist)
-        dispatch({type: 'UPDATE_CARD', payload: {boardName: boardName, listName: parentListName, card: {...card, checklists: updatedChecklist}}})
+        dispatch({type: 'UPDATE_CARD', payload: {...card, checklists: updatedChecklist}})
     }
 
     const deleteCheckListHandler = () => {
 
       const updatedCard = card.checklists!.filter( (checklist) => checklist.checklistId !== checklistId)
       setDeleteListToggle(false)
-      dispatch({type: 'UPDATE_CARD', payload: {boardName: boardName, listName: parentListName, card: {...card, checklists: updatedCard}}})
+      dispatch({type: 'UPDATE_CARD', payload:  {...card, checklists: updatedCard}})
     }
 
     //whenever an itme is added to the list, hide all the helper toggles 

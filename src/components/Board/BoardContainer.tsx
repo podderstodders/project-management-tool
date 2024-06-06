@@ -6,7 +6,6 @@ import { CardViewModal } from "../cardModal/CardModal";
 import { ListActionMenu } from "./ListMenu";
 import { AbsoluteEditCard } from "./AbsoluteEditCard";
 import { NotificationMessage } from "./NotificationMessage";
-import { initialTrelloState } from "../../data/state-config";
 type boardContainerProps = {
     sidebarCloser: () => void;
 }
@@ -35,11 +34,30 @@ const getCheckListCounts = (checklists: checkListProps[]): number[] => {
   }
 }
 
+const darkenHexColor = (hex: string, amount: number): string => {
+  // Ensure the hex color is in the correct format
+  hex = hex.replace(/^#/, '');
+
+  // Convert hex to RGB
+  let r = parseInt(hex.substring(0, 2), 16);
+  let g = parseInt(hex.substring(2, 4), 16);
+  let b = parseInt(hex.substring(4, 6), 16);
+
+  // Decrease brightness
+  r = Math.max(0, r - amount);
+  g = Math.max(0, g - amount);
+  b = Math.max(0, b - amount);
+
+  // Convert RGB back to hex
+  const darkenedHex = `#${r.toString(16).padStart(2, '0')}${g.toString(16).padStart(2, '0')}${b.toString(16).padStart(2, '0')}`;
+  return darkenedHex;
+} 
+
 export const CurrentBoardContainer: React.FC<boardContainerProps> = ({ sidebarCloser}) => {
   const {showOverlay, hideOverlay} = UserOverlayContext()
   const {state, dispatch} = UseBoardContext()
   
-  const currentBoard = state.currentBoard ?? initialTrelloState[0]
+  const currentBoard = state.currentBoard 
 
   //global state, all board has this new list toggle 
   const [newListToggle, setNewListToggle] = useState(false)
@@ -91,7 +109,7 @@ export const CurrentBoardContainer: React.FC<boardContainerProps> = ({ sidebarCl
       if(listFooterInput.active && listFooterInput.cardName.length > 0){
         setListFooterInput({active: false, listName: '', cardName: ''})
         setTimeout( () => {
-          dispatch({type: 'ADD_CARD', payload: {boardName: currentBoard!.boardName, listName: listFooterInput.listName, cardTitle: listFooterInput.cardName}})
+          dispatch({type: 'ADD_CARD', payload: {listName: listFooterInput.listName, cardTitle: listFooterInput.cardName}})
         }, 50)
       }
   }
@@ -110,7 +128,8 @@ export const CurrentBoardContainer: React.FC<boardContainerProps> = ({ sidebarCl
     if(listMenuToggle.active) {
       const theList = currentBoard?.lists.find( (list) => list.listName === list.listName)
       if(theList){
-        dispatch({type: 'UPDATE_LIST', payload: {boardName: currentBoard!.boardName, list: list}})
+        
+        dispatch({type: 'UPDATE_LIST', payload: list})
       }
     }
   }
@@ -124,7 +143,7 @@ export const CurrentBoardContainer: React.FC<boardContainerProps> = ({ sidebarCl
         }) as cardProps[]
         const boardLists = currentBoard.lists
         boardLists.splice(listMenuToggle.index + 1, 0, {...list, items: updatedItems}) 
-        dispatch({type: 'UPDATE_LISTS', payload: {boardName: currentBoard.boardName, lists: boardLists}})
+        dispatch({type: 'UPDATE_LISTS', payload: boardLists})
         setListMenuToggle({
           active: false,
           listName: '',
@@ -160,7 +179,7 @@ export const CurrentBoardContainer: React.FC<boardContainerProps> = ({ sidebarCl
   const addNewCardHandler = (listName: string) => {
     if(newCardToggle.active && newCardToggle.value.length > 0){
       console.log('attempting to add to front')
-      dispatch({type: 'ADD_CARD_FRONT', payload: {boardName: currentBoard!.boardName, listName: listName, cardTitle: newCardToggle.value}})
+      dispatch({type: 'ADD_CARD_FRONT', payload: {listName, cardTitle: newCardToggle.value}})
       setNewCardToggle({
         active: false,
         index: -1,
@@ -172,13 +191,13 @@ export const CurrentBoardContainer: React.FC<boardContainerProps> = ({ sidebarCl
 
   //assume that str has already been parsed
   //higher order function 
-  const absoluteEditEditHandler = (listName: string) => (cardTitle: string, card: cardProps) => {
+  const absoluteEditEditHandler = (cardTitle: string, card: cardProps) => {
     console.log('attempting to edit via absolute edit')
     if(editCardAbsolute.isActive) {
       console.log('attempting to perform the insicision')
       const updatedCard = {...card, title: cardTitle} as cardProps
       console.log(updatedCard)
-      dispatch({type: 'UPDATE_CARD', payload: {boardName: currentBoard!.boardName, listName: listName, card: updatedCard}})
+      dispatch({type: 'UPDATE_CARD',  payload: updatedCard})
       cancelEditCardAbsoluteHandler()
 
     }
@@ -252,7 +271,7 @@ export const CurrentBoardContainer: React.FC<boardContainerProps> = ({ sidebarCl
         listName: listName,
         items: []
       } as listProps
-      dispatch({type: 'ADD_LIST', payload: {boardName: currentBoard!.boardName, list: newList}})
+      dispatch({type: 'ADD_LIST', payload:  newList})
   }
 
  
@@ -326,7 +345,7 @@ export const CurrentBoardContainer: React.FC<boardContainerProps> = ({ sidebarCl
 
     return (
       <section className="app-main">
-        <header className="app-main--header">
+        <header className="app-main--header" style={{backgroundColor: state.colors.asideColor ? darkenHexColor(state.colors.asideColor, 50) : undefined}}>
             <div className="flexed lhs">
               <div>{currentBoard.boardName}</div>
               <div>
@@ -344,7 +363,7 @@ export const CurrentBoardContainer: React.FC<boardContainerProps> = ({ sidebarCl
               <div>Menu</div>
             </div>
         </header>
-        <div className="app-main--body">
+        <div className="app-main--body" style={{backgroundImage: state.colors.mainGradient}}>
           <div className="list-container">
             {
               currentBoard.lists.map( (list, index) => (
@@ -459,7 +478,7 @@ export const CurrentBoardContainer: React.FC<boardContainerProps> = ({ sidebarCl
                                   </div>
                               </div>
                             </div>
-                            <AbsoluteEditCard isActive={editCardAbsolute.isActive} card={card} cardId={editCardAbsolute.cardId} saveCardHandler={absoluteEditEditHandler(list.listName)} openCardModal={openCardModalForAbsoluteHandler} closeHandler={cancelEditCardAbsoluteHandler}/>
+                            <AbsoluteEditCard isActive={editCardAbsolute.isActive} card={card} cardId={editCardAbsolute.cardId} saveCardHandler={absoluteEditEditHandler} openCardModal={openCardModalForAbsoluteHandler} closeHandler={cancelEditCardAbsoluteHandler}/>
                         </div>
                       ))
                     }
