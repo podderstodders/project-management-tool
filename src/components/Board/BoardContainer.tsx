@@ -6,9 +6,8 @@ import { CardViewModal } from "../cardModal/CardModal";
 import { ListActionMenu } from "./ListMenu";
 import { AbsoluteEditCard } from "./AbsoluteEditCard";
 import { NotificationMessage } from "./NotificationMessage";
-type boardContainerProps = {
-    sidebarCloser: () => void;
-}
+import { NewListForm } from "./NewListForm";
+
 //not working because i havent did the dispatch on checklist things lol 
 const getCheckListCounts = (checklists: checkListProps[]): number[] => {
   if(checklists.length === 0){
@@ -53,6 +52,10 @@ const darkenHexColor = (hex: string, amount: number): string => {
   return darkenedHex;
 } 
 
+type boardContainerProps = {
+  sidebarCloser: () => void;
+}
+
 export const CurrentBoardContainer: React.FC<boardContainerProps> = ({ sidebarCloser}) => {
   const {showOverlay, hideOverlay} = UserOverlayContext()
   const {state, dispatch} = UseBoardContext()
@@ -64,7 +67,7 @@ export const CurrentBoardContainer: React.FC<boardContainerProps> = ({ sidebarCl
   const newListToggleHandler = (b: boolean) => {
     sidebarCloser()
     setListMenuToggle({active: false, listName: '', index: -1})
-    setListFooterInput({active: false, listName: '', cardName: ''})
+    setListFooterInput({active: false, listId: -1, cardName: ''})
     setNewCardToggle({active: false, index: -1, value: ''})
     
     //meat and potatoes 
@@ -74,23 +77,29 @@ export const CurrentBoardContainer: React.FC<boardContainerProps> = ({ sidebarCl
   const [editCardAbsolute, setEditCardAbsolute] = useState({
     cardId: -1,
     isActive: false,
-    parentListName: '' 
+    listId: -1 
   })
   const [editCardModal, setEditCardModal] = useState({
     cardId: -1,
     isActive: false,
-    parentListName: ''
+    listId: -1
   })
 
   const [listFooterInput, setListFooterInput] = useState({
     active: false, 
-    listName: '',
+    listId: -1,
     cardName: ''
 
   })
 
+  const [boardWatchToggler, setBoardWatchToggler] = useState(false)
+  const boardWatchHandler = () => {
+    dispatch({type: 'UPDATE_CURRENT_BOARD', payload:{...state.currentBoard, isWatching: !state.currentBoard.isWatching}})
+    setBoardWatchToggler(false)
+  }
+
   //this function is used to set list footer input to true
-  const listFooterInputHandler = (listName: string) => {
+  const listFooterInputHandler = (listId: number) => {
 
     //setting state to remove any present modals/popups/tings
     sidebarCloser() 
@@ -98,7 +107,7 @@ export const CurrentBoardContainer: React.FC<boardContainerProps> = ({ sidebarCl
     setListMenuToggle({active: false, listName: '', index: -1})
     setNewCardToggle({active: false, index: -1, value: ''})
     //meat and potatoes line
-    setListFooterInput({active: true, listName, cardName: ''})
+    setListFooterInput({active: true, listId, cardName: ''})
   }
 
   const listFooterInputChangeHandler = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -107,10 +116,11 @@ export const CurrentBoardContainer: React.FC<boardContainerProps> = ({ sidebarCl
 
   const listFooterInputSubmitHandler = () => {
       if(listFooterInput.active && listFooterInput.cardName.length > 0){
-        setListFooterInput({active: false, listName: '', cardName: ''})
+        //setListFooterInput({active: false, listName: '', cardName: ''})
         setTimeout( () => {
-          dispatch({type: 'ADD_CARD', payload: {listName: listFooterInput.listName, cardTitle: listFooterInput.cardName}})
-        }, 50)
+          dispatch({type: 'ADD_CARD', payload: {listId: listFooterInput.listId, cardTitle: listFooterInput.cardName}})
+          setListFooterInput({active: false, listId: -1, cardName: ''})
+        }, 100)
       }
   }
 
@@ -124,13 +134,10 @@ export const CurrentBoardContainer: React.FC<boardContainerProps> = ({ sidebarCl
     index: -1
   })
 
-  const listWatchingHandler = (list: listProps) => {
-    if(listMenuToggle.active) {
-      const theList = currentBoard?.lists.find( (list) => list.listName === list.listName)
-      if(theList){
-        
-        dispatch({type: 'UPDATE_LIST', payload: list})
-      }
+  const listWatchingHandler = (index: number, watching: boolean) => {
+    if(listMenuToggle.active && listMenuToggle.index === index) {
+      const theList = currentBoard.lists.filter((list) => list.id === listMenuToggle.index)[0]
+      dispatch({type: 'UPDATE_LIST', payload: {...theList, isWatching: watching}})
     }
   }
 
@@ -176,10 +183,10 @@ export const CurrentBoardContainer: React.FC<boardContainerProps> = ({ sidebarCl
   const newCardValueHandler = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     setNewCardToggle({...newCardToggle, value: event.target.value})
   }
-  const addNewCardHandler = (listName: string) => {
+  const addNewCardHandler = (listId: number) => {
     if(newCardToggle.active && newCardToggle.value.length > 0){
       console.log('attempting to add to front')
-      dispatch({type: 'ADD_CARD_FRONT', payload: {listName, cardTitle: newCardToggle.value}})
+      dispatch({type: 'ADD_CARD_FRONT', payload: {listId, cardTitle: newCardToggle.value}})
       setNewCardToggle({
         active: false,
         index: -1,
@@ -208,18 +215,18 @@ export const CurrentBoardContainer: React.FC<boardContainerProps> = ({ sidebarCl
   //need to consider the case that its both clicked on.
   
 
-  const editCardAbsoluteHandler = (id: number, name: string) => {
+  const editCardAbsoluteHandler = (id: number, listId: number) => {
     console.log('edit card absolute handler just toggled for id - ', id)
     sidebarCloser()
     setListMenuToggle({active: false, listName: '', index: -1})
     setNewListToggle(false)
-    setListFooterInput({active: false, listName: '', cardName: ''})
+    setListFooterInput({active: false, listId: -1, cardName: ''})
 
     setEditCardAbsolute({
    
       isActive: true,
       cardId: id,
-      parentListName: name
+      listId
     })
     
     showOverlay()
@@ -231,14 +238,14 @@ export const CurrentBoardContainer: React.FC<boardContainerProps> = ({ sidebarCl
     setEditCardAbsolute({
       cardId: -1,
       isActive: false,
-      parentListName: ''
+      listId: -1
     })
     hideOverlay()
   }
 
-  const editCardModalHandler = (id: number, listName: string) => {
+  const editCardModalHandler = (id: number, listId: number) => {
     sidebarCloser()
-    setListFooterInput({active: false, listName: '', cardName: ''})
+    setListFooterInput({active: false, listId: -1, cardName: ''})
     setListMenuToggle({active: false, listName: '', index: -1})
     setNewListToggle(false)
     if(id > 0){ 
@@ -246,7 +253,7 @@ export const CurrentBoardContainer: React.FC<boardContainerProps> = ({ sidebarCl
         setEditCardModal({
           cardId: id,
           isActive: true,
-          parentListName: listName
+          listId
         })
         // resetCertainTings() 
         showOverlay()
@@ -261,13 +268,14 @@ export const CurrentBoardContainer: React.FC<boardContainerProps> = ({ sidebarCl
     setEditCardModal({
       cardId: -1,
       isActive: false,
-      parentListName: ''
+      listId: -1
     })
     hideOverlay()
   }
 
   const createNewListHandler = (listName: string) => {
       const newList = {
+        id: state.currentBoard.lists.length,
         listName: listName,
         items: []
       } as listProps
@@ -279,7 +287,7 @@ export const CurrentBoardContainer: React.FC<boardContainerProps> = ({ sidebarCl
   const listMenuToggleHandler = (listName: string, index: number) => {
       sidebarCloser()
       setNewListToggle(false) 
-      setListFooterInput({active: false, listName: '', cardName: ''})
+      setListFooterInput({active: false, listId: -1, cardName: ''})
       setNewCardToggle({active: false, index: -1, value: ''})
       if(listMenuToggle.active){
           if(listName === listMenuToggle.listName && index === listMenuToggle.index){
@@ -310,9 +318,9 @@ export const CurrentBoardContainer: React.FC<boardContainerProps> = ({ sidebarCl
   const openCardModalForAbsoluteHandler = () => {
     if(editCardAbsolute.isActive) {
     
-      const {cardId, parentListName} = editCardAbsolute
-      setEditCardAbsolute({cardId: -1, parentListName: '', isActive: false})
-      setEditCardModal({cardId, parentListName, isActive: true})
+      const {cardId, listId} = editCardAbsolute
+      setEditCardAbsolute({cardId: -1, listId, isActive: false})
+      setEditCardModal({cardId, listId, isActive: true})
     }
   }
   type notificationProps = {
@@ -329,6 +337,13 @@ export const CurrentBoardContainer: React.FC<boardContainerProps> = ({ sidebarCl
       setTester69({active: true, message: child})
     }
   }
+
+  //toggle board menu using dispatch 
+  const boardMenuTogglerHandler = () => {
+    dispatch({type: 'TOGGLE_BOARD_MENU'})
+  }
+
+  //board favorite function 
 
 
   useEffect( () => {
@@ -347,20 +362,59 @@ export const CurrentBoardContainer: React.FC<boardContainerProps> = ({ sidebarCl
       <section className="app-main">
         <header className="app-main--header" style={{backgroundColor: state.colors.asideColor ? darkenHexColor(state.colors.asideColor, 50) : undefined}}>
             <div className="flexed lhs">
-              <div>{currentBoard.boardName}</div>
-              <div>
+              <div className="boardName">{currentBoard.boardName}</div>
+              <div className="favoriteAction">
                 <span>
                     <svg width="20" height="20" viewBox="0 0 24 24" fill={currentBoard.isFavorite ? '#ffffff' : 'none'} xmlns="http://www.w3.org/2000/svg">
                         <path d="M11.2691 4.41115C11.5006 3.89177 11.6164 3.63208 11.7776 3.55211C11.9176 3.48263 12.082 3.48263 12.222 3.55211C12.3832 3.63208 12.499 3.89177 12.7305 4.41115L14.5745 8.54808C14.643 8.70162 14.6772 8.77839 14.7302 8.83718C14.777 8.8892 14.8343 8.93081 14.8982 8.95929C14.9705 8.99149 15.0541 9.00031 15.2213 9.01795L19.7256 9.49336C20.2911 9.55304 20.5738 9.58288 20.6997 9.71147C20.809 9.82316 20.8598 9.97956 20.837 10.1342C20.8108 10.3122 20.5996 10.5025 20.1772 10.8832L16.8125 13.9154C16.6877 14.0279 16.6252 14.0842 16.5857 14.1527C16.5507 14.2134 16.5288 14.2807 16.5215 14.3503C16.5132 14.429 16.5306 14.5112 16.5655 14.6757L17.5053 19.1064C17.6233 19.6627 17.6823 19.9408 17.5989 20.1002C17.5264 20.2388 17.3934 20.3354 17.2393 20.3615C17.0619 20.3915 16.8156 20.2495 16.323 19.9654L12.3995 17.7024C12.2539 17.6184 12.1811 17.5765 12.1037 17.56C12.0352 17.5455 11.9644 17.5455 11.8959 17.56C11.8185 17.5765 11.7457 17.6184 11.6001 17.7024L7.67662 19.9654C7.18404 20.2495 6.93775 20.3915 6.76034 20.3615C6.60623 20.3354 6.47319 20.2388 6.40075 20.1002C6.31736 19.9408 6.37635 19.6627 6.49434 19.1064L7.4341 14.6757C7.46898 14.5112 7.48642 14.429 7.47814 14.3503C7.47081 14.2807 7.44894 14.2134 7.41394 14.1527C7.37439 14.0842 7.31195 14.0279 7.18708 13.9154L3.82246 10.8832C3.40005 10.5025 3.18884 10.3122 3.16258 10.1342C3.13978 9.97956 3.19059 9.82316 3.29993 9.71147C3.42581 9.58288 3.70856 9.55304 4.27406 9.49336L8.77835 9.01795C8.94553 9.00031 9.02911 8.99149 9.10139 8.95929C9.16534 8.93081 9.2226 8.8892 9.26946 8.83718C9.32241 8.77839 9.35663 8.70162 9.42508 8.54808L11.2691 4.41115Z" stroke="#ffffff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                     </svg>
                 </span>
+                <div className="favoriteAction--text">{currentBoard.isFavorite ? `Click to unstar ${currentBoard.boardName}. It will be removed from you starred list.` : `Click to star ${currentBoard.boardName}. It will be added to your starred list`}</div>
               </div>
               <div>
               </div>
             </div>
             <div className="flexed rhs">
+              {
+                boardWatchToggler
+                && 
+                <div className="boardwatching-message--absolute--modal">
+                  <div className="bwmam-row flexed">
+                    <div className="zero"></div>
+                    <div className="one">Stop watching?</div>
+                    <div className="zero">
+                      <button className="btn-nobg" onClick={() => setBoardWatchToggler(false)}>x</button>
+                    </div>
+                  </div>
+                  <div className="bwmam-row text">
+                    You can watch again via the board menu.
+                  </div>
+                  <div className="bwmam-row w-100">
+                    <button className="btn-danger" onClick={boardWatchHandler}>Stop Watching</button>
+                  </div>
+              </div>
+              }
+              {
+                state.currentBoard.isWatching 
+                && 
+                <div className="boardwatching" onClick={() => setBoardWatchToggler(true)}>
+                  <div className="boardwatching-icon">
+                    <svg width="24" height="24" viewBox="0 -0.5 25 25" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path fillRule="evenodd" clipRule="evenodd" d="M18.5 12.714C18.5 15.081 15.366 17 11.5 17C7.634 17 4.5 15.081 4.5 12.714C4.5 10.347 7.634 8.42896 11.5 8.42896C15.366 8.42896 18.5 10.347 18.5 12.714Z" stroke="#000000" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                      <path fillRule="evenodd" clipRule="evenodd" d="M13.2501 12.714C13.2647 13.4249 12.8477 14.074 12.1951 14.3562C11.5424 14.6384 10.7839 14.4977 10.2759 14.0002C9.76792 13.5027 9.61148 12.7472 9.8801 12.0889C10.1487 11.4305 10.789 11.0001 11.5001 11C11.9594 10.9952 12.4019 11.1731 12.7301 11.4945C13.0583 11.816 13.2453 12.2546 13.2501 12.714V12.714Z" stroke="#000000" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                      <path d="M10.75 8.429C10.75 8.84321 11.0858 9.179 11.5 9.179C11.9142 9.179 12.25 8.84321 12.25 8.429H10.75ZM12.25 5C12.25 4.58579 11.9142 4.25 11.5 4.25C11.0858 4.25 10.75 4.58579 10.75 5H12.25ZM18.2931 7.05471C18.4813 6.68571 18.3347 6.23403 17.9657 6.04586C17.5967 5.85769 17.145 6.00428 16.9569 6.37329L18.2931 7.05471ZM15.5199 9.19129C15.3317 9.5603 15.4783 10.012 15.8473 10.2001C16.2163 10.3883 16.668 10.2417 16.8561 9.87271L15.5199 9.19129ZM6.04314 6.37329C5.85497 6.00428 5.40329 5.85769 5.03429 6.04586C4.66528 6.23403 4.51869 6.68571 4.70686 7.05471L6.04314 6.37329ZM6.14386 9.87271C6.33203 10.2417 6.78371 10.3883 7.15271 10.2001C7.52172 10.012 7.66831 9.5603 7.48014 9.19129L6.14386 9.87271ZM12.25 8.429V5H10.75V8.429H12.25ZM16.9569 6.37329L15.5199 9.19129L16.8561 9.87271L18.2931 7.05471L16.9569 6.37329ZM4.70686 7.05471L6.14386 9.87271L7.48014 9.19129L6.04314 6.37329L4.70686 7.05471Z" fill="#000000"/>
+                    </svg>
+                  </div>
+                  <div className="boardwatching-message">Watching</div>
+                  <div className="boardwatching-message--absolute">watching</div>
+              </div>
+              }
               <div>filter</div>
-              <div>Menu</div>
+              {
+                !state.boardMenuToggle 
+                && 
+                <div onClick={boardMenuTogglerHandler} style={{cursor: 'pointer'}}>Menu</div>
+              }
             </div>
         </header>
         <div className="app-main--body" style={{backgroundImage: state.colors.mainGradient}}>
@@ -414,7 +468,7 @@ export const CurrentBoardContainer: React.FC<boardContainerProps> = ({ sidebarCl
                           <textarea name="" id="" placeholder="Enter a title for this card" value={newCardToggle.value} onChange={newCardValueHandler}></textarea>
                         </div>
                         <div className="addItem-actions">
-                            <button className="btn-primary" onClick={() => addNewCardHandler(list.listName)}>Add card</button>
+                            <button className="btn-primary" onClick={() => addNewCardHandler(list.id)}>Add card</button>
                             <button className="btn-nobg" onClick={() => setNewCardToggle({active: false, index: -1, value: ''})}>x</button>
                         </div>
                     </div>
@@ -440,7 +494,7 @@ export const CurrentBoardContainer: React.FC<boardContainerProps> = ({ sidebarCl
                                   }
                                 </div>
                                 }
-                                <div onClick={() => editCardModalHandler(card.id, list.listName)} style={{overflow: 'hidden'}}>{card.title}</div>
+                                <div onClick={() => editCardModalHandler(card.id, list.id)} style={{overflow: 'hidden'}}>{card.title}</div>
                                 <div className="card-icons">
                                   {
                                     card.isWatching 
@@ -470,7 +524,7 @@ export const CurrentBoardContainer: React.FC<boardContainerProps> = ({ sidebarCl
                                 </div>
                               </div>
                               <div className="list-item--card__absolute">
-                                  <div className="card-editAction" onClick={() => editCardAbsoluteHandler(card.id, list.listName)}>
+                                  <div className="card-editAction" onClick={() => editCardAbsoluteHandler(card.id, list.id)}>
                                   <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15">
                                       <path d="M2.679 10.293l5.849-5.851 3 3-5.83 5.873-4.026 1.072z"/>
                                       <path d="M11.637 1.676c-.2 0-.4.077-.554.23l-1.77 1.768 3.053 3.053 1.77-1.77a.783.783 0 0 0 0-1.109l-1.944-1.941a.782.782 0 0 0-.555-.23z"/>
@@ -487,7 +541,7 @@ export const CurrentBoardContainer: React.FC<boardContainerProps> = ({ sidebarCl
                       {
                         listFooterInput.active
                         && 
-                        listFooterInput.listName === list.listName 
+                        listFooterInput.listId === list.id 
                         && 
                         <div className="lif-active">
                           <div className="lif-active--row">
@@ -503,7 +557,7 @@ export const CurrentBoardContainer: React.FC<boardContainerProps> = ({ sidebarCl
                       {
                         listFooterInput.active
                         &&
-                        listFooterInput.listName === list.listName 
+                        listFooterInput.listId === list.id 
                         || 
                         newCardToggle.active && newCardToggle.index === index
                         ?
@@ -511,7 +565,7 @@ export const CurrentBoardContainer: React.FC<boardContainerProps> = ({ sidebarCl
                         : 
                         <div className="lif-unactive">
                           <div className='flex1'>
-                              <button className="btn-nobg" onClick={() => listFooterInputHandler(list.listName)}>Add a card</button>
+                              <button className="btn-nobg" onClick={() => listFooterInputHandler(list.id)}>Add a card</button>
                           </div>
                           <div className="flex0"></div>
                       </div>
@@ -523,7 +577,7 @@ export const CurrentBoardContainer: React.FC<boardContainerProps> = ({ sidebarCl
                ) )
             }
             <div className="list-item emptylist">
-               <a onClick={() => newListToggleHandler(true)}>New List</a>
+               <a onClick={() => newListToggleHandler(!newListToggle)}>New List</a>
                <NewListForm isActive={newListToggle} disableModalHandler={() => setNewListToggle(false)} saveNewList={createNewListHandler}/>
             </div>
           </div>
@@ -537,44 +591,6 @@ export const CurrentBoardContainer: React.FC<boardContainerProps> = ({ sidebarCl
     
 }
 
-
-
-type newListFormProps = {
-  isActive: boolean,
-  disableModalHandler: () => void;
-  saveNewList: (str: string) => void;
-}
-
-const NewListForm: React.FC<newListFormProps> = ({isActive, disableModalHandler, saveNewList}) => {
-  const [listName, setListName] = useState('')
-  if(!isActive) {
-    return null;
-  }
-
-  const listNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setListName(event.target.value)
-  }
-  const submitList = () => {
-    if(listName.length > 0){
-      saveNewList(listName)
-      setListName('')
-    }
-  }
-
-  return (
-    <div className="absolute-inputElement">
-      <div className="absolute-container">
-        <div>
-          <input type="text" name="" id="" value={listName} onChange={listNameChange} placeholder="Enter list title..." autoFocus/>
-        </div>
-        <div className='absolute-container--child'>
-          <button className="btn-primary" onClick={submitList}>Add List</button>
-          <button className="btn-darker" onClick={disableModalHandler}>X</button>
-        </div>
-      </div>
-    </div>
-  )
-}
 
 const CheckListIcon = ({checklist}: {checklist: checkListProps[]}) => {
   const numbers = getCheckListCounts(checklist)

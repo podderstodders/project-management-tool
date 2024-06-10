@@ -364,3 +364,88 @@ const addBoardHandler = () => {
 	}, 50)
 
 5. The sidebar renders out a list of boards that user can choose. After the main screen is changed, the sidebar will be updated with the new board, as well as making the new board the current active board. 
+
+
+June 6, 5:30PM
+add a boardId property 
+
+
+thinking about dispatch in terms of single functions 
+
+having a type of {'load_board'}, for the sidebar.
+
+	- which actually takes the current board, and updates it within the array. 
+	- then we update the currentBOard to be the selected board 
+	- then we 
+	
+dispatch(type: load_board, payload: boardProps, boardName: string)
+	- update_boards(payload)
+	- updateBoard(boardName)
+	colors: {
+		primary: payload.colors.parimy 
+		
+	}
+	
+	
+currentBoard in the BoardContainer uses optional everywhere. 
+
+
+in board COntainer, for list, i need to uses something that is not listName. 
+i think i need to add a listId 
+
+
+7:49PM 
+
+adding boardId and listId to board and list prop, so that i avoid the problem that a board name is duplicated or list name is duplicated. 
+
+so i need to modify the initial state
+
+8:35PM 
+need to modify context so that it adds a boardId, when adding a newboard 
+
+and need to modify context so that when creating a new list, it sets the index 
+
+First question, where Am i adding a new list to the board. 
+
+June 7, 1:00AM 
+app is working, fixing the list watching feature. 
+
+
+June 7, 5:25AM 
+
+A problem: 
+
+Toggling the boardMenu when it exists within in Parent, and the menu word /button is situated within BoardContainer.
+
+So the naiive approach is to define the state within the parent, and pass in the state handler to BoardContainer. 
+
+But now in BoardCOntainer, for any handler that needs the main view (all other modals are closed), i would also have to call the handler for this boardMenu.
+
+Or we can use context.
+
+add in a property called 
+boardMenuToggle: boolean 
+
+within BoardContainer, if the user clicks on the menu,
+dispatch and change this boardMenuToggle to true.
+
+then within in App, I use context, and check if boardMenuToggle is true, then pass in the value to the board menu. 
+
+
+^^ - worked well; 
+
+to note: we dont have to pass in a payload if the reducer doesnt need it.
+
+i.e dispatch({type: 'yomomoms'})
+
+June 8 - Working on the BoardMenu Feature 
+
+June 9 - 5:44AM 
+
+Been working on menu boardMenu,
+implemented:
+	- change background 
+	- about 
+	- activity -> maybe i can do it, idk.
+	- watch 
+	

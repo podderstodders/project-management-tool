@@ -1,7 +1,8 @@
 
 export type listProps = {
-    listName: string, 
-    items: Array<cardProps>,
+    id: number
+    listName: string 
+    items: Array<cardProps>
     isWatching?: boolean 
 }
 
@@ -14,20 +15,23 @@ export type coverPropertiesProps = {
 }
 
 export type cardLabelProps = {
-    labelColorName: string,
-    labelColorCode: string,
-    labelIsChecked: boolean,
+    labelColorName: string
+    labelColorCode: string
+    labelIsChecked: boolean
     labelTitle: string
     labelIndex: number
 }
 
+
+
 export type boardProps = {
+    id: number
     boardName: string,
     isFavorite: false, 
     description: string, 
     isWatching: boolean
     lists: Array<listProps>
-    boardColor?: boardColorProps
+    boardColor: boardColorProps
 }
 
 export type boardColorProps = {

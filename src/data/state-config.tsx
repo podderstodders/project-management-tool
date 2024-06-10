@@ -111,7 +111,7 @@ export const initialTrelloState = [
         ]
       }
     ],
-    "boardColor": { primary: "#7647a3", secondary: "#E4EfE9", gradient: "linear-gradient(to right bottom, #7647a3, #7a8389, #6f787d, #646c70, #596164)", emoji: "🔮" },
+    "boardColor": { primary: "#cc3d0f", secondary: "#DD2476", gradient: "linear-gradient(to right bottom, #cc3d0f, #fc3f44, #f53056, #eb2667, #dd2476)", emoji: "❤️‍🔥" },
   },
   {
     "boardName": "Project Beta",
@@ -166,7 +166,8 @@ export const initialTrelloState = [
           }
         ]
       }
-    ]
+    ],
+    "boardColor": { primary: "#b50043", secondary: "#FBB03B", gradient: "linear-gradient(to right bottom, #b50043, #e8434d, #f56941, #fb8d3a, #fbb03b)", emoji: "🔥" },
   },
   {
     "boardName": "Project Gamma",
@@ -255,7 +256,8 @@ export const initialTrelloState = [
           }
         ]
       }
-    ]
+    ],
+    "boardColor": { primary: "#cc4a57", secondary: "#FFC371", gradient: "linear-gradient(to right bottom, #cc4a57, #ff7a65, #ff9362, #ffac66, #ffc371)", emoji: "🌺" },
   },
   {
     "boardName": "Project Delta",
@@ -329,7 +331,8 @@ export const initialTrelloState = [
           }
         ]
       }
-    ]
+    ],
+    "boardColor": { primary: "#bf7272", secondary: "#A890FE", gradient: "linear-gradient(to right bottom, #bf7272, #ef85a3, #e981bf, #d485df, #a890fe)", emoji: "🌺" },
   },
   {
     "boardName": "Project Epsilon",
@@ -398,11 +401,20 @@ export const initialTrelloState = [
           }
         ]
       }
-    ]
+    ],
+    "boardColor":     { primary: "#9e1c4b", secondary: "#1D2671", gradient: "linear-gradient(to right bottom, #9e1c4b, #a62a6f, #822675, #572676, #1d2671)", emoji: "💗" },
   }
 ] as boardProps[];
-  
 
+export const updatedTrelloState = initialTrelloState.map( (board, index) => ({
+  ...board,
+  id: index,
+  lists: board.lists.map( (list, listIndex) => ({
+    ...list,
+    id: listIndex
+  }))
+}))
+  
 export const getBoardByName = (name: string) => {
   const filtered = initialTrelloState.filter ( (b) => b.boardName === name)
 

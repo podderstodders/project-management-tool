@@ -1,6 +1,6 @@
 import {Dispatch, createContext, useContext, useReducer, ReactNode} from 'react'
 import { boardColorProps, boardProps, cardProps, checkListItemProps, listProps } from '../@types/board'
-import { initialTrelloState } from '../data/state-config'
+import { updatedTrelloState } from '../data/state-config'
 
 
 //helper function 
@@ -17,17 +17,19 @@ export type BoardState = {
         mainGradient: string 
     }
     isAddBoardHappening: boolean 
+    boardMenuToggle: boolean
 }
 
 const initialState: BoardState = {
-    boards: initialTrelloState,
-    currentBoard: initialTrelloState[0],
+    boards: updatedTrelloState,
+    currentBoard: updatedTrelloState[0],
     colors: {
         headerColor: '',
         asideColor: '',
         mainGradient: ''
     },
-    isAddBoardHappening: false 
+    isAddBoardHappening: false,
+    boardMenuToggle: false 
 }
 
 
@@ -37,15 +39,18 @@ type BoardAction =
     | {type: 'ADD_LIST'; payload:  listProps}
     | {type: 'UPDATE_LIST'; payload: listProps}
     | {type: 'UPDATE_LISTS'; payload: listProps[]}
-    | {type: 'ADD_CARD'; payload: {listName: string, cardTitle: string}}
-    | {type: 'ADD_CARD_FRONT'; payload: {listName: string, cardTitle: string}}
+    | {type: 'ADD_CARD'; payload: {listId: number, cardTitle: string}}
+    | {type: 'ADD_CARD_FRONT'; payload: {listId: number, cardTitle: string}}
     | {type: 'UPDATE_CARD'; payload: cardProps}
-    | {type: 'UPDATE_CHECKLIST'; payload: {listName: string, card: cardProps, checklistId: number, checklistItems: checkListItemProps[]}}
+    | {type: 'UPDATE_CHECKLIST'; payload: {listId: number, card: cardProps, checklistId: number, checklistItems: checkListItemProps[]}}
     | {type: 'UPDATE_HAPPENING'; payload: boolean}
     | {type: 'UPDATE_COLOR_HEADER'; payload: string}
     | {type: 'UPDATE_COLOR_ASIDE'; payload: string}
     | {type: 'UPDATE_BG_GRADIENT'; payload: string}
     | {type: 'UPDATE_COLORS'; payload: boardColorProps}
+    | {type: 'LOAD_BOARD'; payload: {board: boardProps, boardName: string}}
+    | {type: 'TOGGLE_BOARD_MENU'}
+
 const boardReducer = (state: BoardState, action: BoardAction): BoardState => {
     switch(action.type) {
         case 'UPDATE_CURRENT_BOARD':
@@ -76,6 +81,10 @@ const boardReducer = (state: BoardState, action: BoardAction): BoardState => {
             return updateBgGradient(state ,action)
         case 'UPDATE_COLORS':
             return updateColors(state, action) 
+        case 'LOAD_BOARD':
+            return loadBoardFromSidebar(state, action)
+        case 'TOGGLE_BOARD_MENU':
+            return boardMenuToggler(state,action)
         default:
             throw new Error(`unknown action type: ${action}`)
     }
@@ -123,7 +132,8 @@ const updateCurrentBoard = (state: BoardState, action: BoardAction): BoardState 
     if(action.type !== 'UPDATE_CURRENT_BOARD') return state 
     return {
         ...state,
-        currentBoard: action.payload
+        currentBoard: action.payload,
+
     }
 }
 const addList = (state: BoardState, action: BoardAction): BoardState => {
@@ -179,7 +189,7 @@ const addCard = (state: BoardState, action: BoardAction): BoardState => {
         currentBoard: {
             ...state.currentBoard,
             lists: state.currentBoard.lists.map( (list) => 
-                list.listName === action.payload.listName ? {...list, items: [...list.items, newCard]} : list
+                list.id === action.payload.listId ? {...list, items: [...list.items, newCard]} : list
             )
         }
     }
@@ -202,7 +212,7 @@ const addCardFront = (state: BoardState, action: BoardAction): BoardState => {
         currentBoard: {
             ...state.currentBoard,
             lists: state.currentBoard.lists.map( (list) => 
-                list.listName === action.payload.listName ? {...list, items: [newCard, ...list.items]} : list
+                list.id === action.payload.listId ? {...list, items: [newCard, ...list.items]} : list
             )
         }
     }
@@ -237,7 +247,7 @@ const updateChecklist = (state: BoardState, action: BoardAction): BoardState => 
         currentBoard: {
             ...state.currentBoard,
             lists: state.currentBoard.lists.map( (list) => 
-                list.listName === action.payload.listName 
+                list.id === action.payload.listId 
                 ? {...list, items: list.items.map( card => (
                     card.id === action.payload.card.id 
                     ? {...card, 
@@ -300,5 +310,32 @@ const updateColors = (state: BoardState, action: BoardAction): BoardState => {
             asideColor: action.payload.primary,
             mainGradient: action.payload.gradient
         }
+    }
+}
+
+const loadBoardFromSidebar = (state: BoardState, action: BoardAction): BoardState => {
+    if(action.type !== 'LOAD_BOARD') return state 
+    const currentBoardd = state.boards.filter( (board) => board.boardName === action.payload.boardName)[0]
+    return {
+        ...state,
+        boards: state.boards.map( (board) => (
+            board.boardName === action.payload.board.boardName 
+            ? action.payload.board 
+            : board
+        )),
+        currentBoard: currentBoardd,
+        colors: {
+            headerColor: currentBoardd.boardColor.primary,
+            asideColor: currentBoardd.boardColor.primary,
+            mainGradient: currentBoardd.boardColor.gradient
+        }
+    }
+}
+
+const boardMenuToggler = (state: BoardState, action: BoardAction): BoardState => {
+    if(action.type !== 'TOGGLE_BOARD_MENU') return state 
+    return {
+        ...state, 
+        boardMenuToggle: !state.boardMenuToggle
     }
 }

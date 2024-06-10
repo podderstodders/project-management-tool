@@ -11,8 +11,9 @@ import { CurrentBoardContainer } from './components/Board/BoardContainer'
 import { AddBoardModal } from './components/sidebar/AddBoardModal'
 import { UseBoardContext } from './context/boardcontext'
 import { boardColorProps, boardProps } from './@types/board'
+import { BoardMenu } from './components/BoardMenu/BoardMenu'
 
-const defaultBoardColorState: boardColorProps = { primary: "#0035cc", secondary: "#92EFFD", gradient: "linear-gradient(to right bottom, #0035cc, #0093ff, #00b7ff, #20d5ff, #92effd)", emoji: "🌌" };
+
 
 function App() {
   const {state, dispatch} = UseBoardContext() 
@@ -22,11 +23,7 @@ function App() {
   const [newBoardToggle, setNewBoardToggle] = useState(false)
  
   const changeBoard = (boardname: string) => {
-    const theBoard = state.boards.find( (board) => board.boardName === boardname)
-    if(theBoard){
-      dispatch({type: 'UPDATE_CURRENT_BOARD', payload: theBoard})
-      dispatch({type: 'UPDATE_COLORS', payload: theBoard.boardColor ?? defaultBoardColorState})
-    }
+    dispatch({type: 'LOAD_BOARD', payload: {board: currentBoard, boardName: boardname}})
   }
   const sidebarToggleHandler = () => {
     if(sidebarToggle){
@@ -43,32 +40,30 @@ function App() {
   const addNewBoardHandler = async (boardName: string, colors: boardColorProps) => {
 
     dispatch({type: 'UPDATE_HAPPENING', payload: true})
+    dispatch({type: 'TOGGLE_BOARD_MENU'})
     await delay(2000);
     dispatch({type: 'UPDATE_HAPPENING', payload: false})
     setNewBoardToggle(false)
     
     await delay(300) 
-    dispatch({type: 'UPDATE_COLOR_HEADER', payload: colors.primary})
-    await delay(50) 
-    dispatch({type: 'UPDATE_COLOR_ASIDE', payload: colors.primary})
-    await delay(40) 
-    dispatch({type: 'UPDATE_BG_GRADIENT', payload: colors.gradient})
+    dispatch({type: 'UPDATE_COLORS', payload: colors})
     //effect 4 
-  
-    dispatch({type: 'UPDATE_CURRENT_BOARD', payload: {...state.currentBoard, boardName: boardName}})
-
+    
     //lastly, a dispatch to update the global board 
     const newBoard: boardProps = {
-      boardName, 
+      id: state.boards.length,
+      boardName: boardName, 
       isFavorite: false, 
       description: '',
       isWatching: false,
-      lists: [],
+      lists: currentBoard.lists,
       boardColor: colors
     }
-    dispatch({type: 'ADD_BOARD', payload: newBoard}) 
-    await delay(400)
     dispatch({type: 'UPDATE_CURRENT_BOARD', payload: newBoard})
+    await delay(500)
+    dispatch({type: 'ADD_BOARD', payload: {...newBoard, lists: []}}) 
+    await delay(700)
+    dispatch({type: 'UPDATE_CURRENT_BOARD', payload: {...newBoard, lists: []}})
   }
   useEffect( () => {
 
@@ -122,6 +117,7 @@ function App() {
           }
           </aside>
           <CurrentBoardContainer sidebarCloser={() => setNewBoardToggle(false)}/>
+          <BoardMenu active={state.boardMenuToggle}/>
         </main>
         <AbsoluteOverlay />
       

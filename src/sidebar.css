@@ -1,7 +1,6 @@
 .app-sidebar {
   position: relative;
-  /* background-color: #505f79e6; */
-  background-color: #596164;
+  background-color: #505f79e6;
   min-width: 1.2rem;
   max-width: 20rem;
   border-right: 2px solid white;
@@ -80,8 +79,19 @@
 }
 
 .app-sidebar-row.item {
+  position: relative;
   padding: 0.5rem;
 }
+
+
+.app-sidebar-row.item .notfavoritehover {
+  display: none;
+}
+
+.app-sidebar-row.item:hover .notfavoritehover {
+  display: block;
+}
+
 
 .app-sidebar-row.item.active {
   padding-top: 0.7rem;
@@ -118,7 +128,7 @@
   font-size: 0.95rem;
   position: absolute;
   top: 5.8rem;
-  left: 13.75rem;
+  left: 15.75rem;
   z-index: 4;
   background-color: white;
   color: black;

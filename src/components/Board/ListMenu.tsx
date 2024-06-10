@@ -35,21 +35,19 @@ type listActionMenuProps = {
     listIndex: number 
     addCardToggleHandler: () => void
     parentCloseHandler: () => void;
-   
-    setWatching: (list: listProps) => void
     copyList: (list: listProps) => void;
     setNotification: (str: ReactNode) => void 
+    setWatching: (listIndex: number, isWatching: boolean) => void;
 }
 
 type listActionMenuStatesProps = 'menu' | 'add' | 'copy' | 'move' | 'moveAll' | 'sort'
 
 
-export const ListActionMenu: React.FC<listActionMenuProps> = ({boardName, list, listIndex, addCardToggleHandler, parentCloseHandler, setWatching, copyList, setNotification}) => {
+export const ListActionMenu: React.FC<listActionMenuProps> = ({boardName, list, listIndex, addCardToggleHandler, parentCloseHandler, copyList, setNotification, setWatching}) => {
     console.log('on mount list index is ', listIndex)
     // const listActionMenuStates = ['menu', 'add', 'copy', 'move', 'moveAll', 'sort']
     const {state, dispatch} = UseBoardContext() 
     const [currentState, setCurrentState] = useState<listActionMenuStatesProps>('menu')
-    const [listWatch, setListWatch] = useState<boolean>(list.isWatching !== undefined ? list.isWatching : false )
     //copy list name tings 
     const [copyListName, setCopyListName] = useState(list.listName)
     const [copyListSubmitPorn, setCopyListSubmitPorn] = useState(false) 
@@ -58,15 +56,10 @@ export const ListActionMenu: React.FC<listActionMenuProps> = ({boardName, list, 
     }
     const copyListSubmitFn = () => {
         if(copyListName.length > 0){
-            let parsedListName = copyListName
-            if(parsedListName === list.listName){
-                const randomId = Math.floor(Math.random() * (10 - 0 + 1)) + 1;
-                parsedListName = `${parsedListName}_${randomId}`
-            }
-
+       
             setCopyListSubmitPorn(true)
-            const newList = {...list, listName: parsedListName} as listProps
-            const inlineNotificationMessage = <span>Copying list <span className="blood underlined">{list.listName}</span> to new list <span className="trees underlined">{parsedListName}</span></span>
+            const newList = {...list, listName: copyListName, id: state.currentBoard.lists.length} as listProps
+            const inlineNotificationMessage = <span>Copying list <span className="blood underlined">{list.listName}</span> to new list <span className="trees underlined">{copyListName}</span></span>
             setNotification(inlineNotificationMessage)
             setTimeout( () => {
                 setCopyListSubmitPorn(false)
@@ -128,14 +121,14 @@ export const ListActionMenu: React.FC<listActionMenuProps> = ({boardName, list, 
         }
     }
 
-    const moveAllHandler = (str: string) => {
-        if(str.length > 0) {
+    const moveAllHandler = (id: number) => {
+        if(id > 0) {
             const theBoard = state.boards.find( (board) => board.boardName === boardName)
             if(theBoard) {
                 const theList = theBoard.lists.map( (lll) => {
-                    if(lll.listName === list.listName) {
+                    if(lll.id === list.id) {
                         return {...lll, items: []}
-                    } else if(lll.listName === str){
+                    } else if(lll.id === id){
                         return {...lll, items: [...lll.items, ...list.items]}
                     } else {
                         return lll
@@ -143,23 +136,19 @@ export const ListActionMenu: React.FC<listActionMenuProps> = ({boardName, list, 
                 })
                 dispatch({type: "UPDATE_LISTS", payload: theList})
                 parentCloseHandler()
-                const inlineMessage = <span>Moving all items from <span className="underlined">{list.listName}</span> to <span className="green underlined">{str}</span></span>
+                const inlineMessage = <span>Moving all items from <span className="underlined">{list.listName}</span> to <span className="green underlined">list {id}</span></span>
                 setNotification(inlineMessage)
             }
         }
     }
 
-    const listWatchHandler = () => {
-        if(!listWatch) {
-            const updatedList = {...list, isWatching: true} as listProps
-            setWatching(updatedList)
-            setListWatch(true) 
+    const listWatchHandler = (listIndex: number) => {
+        if(!list.isWatching) {
+            setWatching(listIndex, true)
             const inlineMessage = <span>Now watching <span className="green underlined">{list.listName}</span></span>
             setNotification(inlineMessage)
         } else {
-            const updatedList = {...list, isWatching: false} as listProps
-            setWatching(updatedList)
-            setListWatch(false) 
+            setWatching(listIndex, false)
             const inlineMessage = <span>No more watching of <span className="red underlined">{list.listName}</span></span>
             setNotification(inlineMessage)
         }
@@ -179,7 +168,7 @@ export const ListActionMenu: React.FC<listActionMenuProps> = ({boardName, list, 
                         <div className="link-item" onClick={() => setCurrentState('move')}>Move list</div>
                         <div className={`link-item ${list.items.length === 0 ? 'empty' : undefined}`} onClick={list.items.length > 0 ? () => setCurrentState('moveAll') : undefined}>Move all cards in this list</div>
                         <div className="link-item" onClick={() => setCurrentState('sort')}>Sort by ...</div>
-                        <div className={`link-item ${listWatch ? 'watchActive' : undefined}`} onClick={() => listWatchHandler()}>Watch</div>
+                        <div className={`link-item ${list.isWatching ? 'watchActive' : undefined}`} onClick={() => listWatchHandler(list.id)}>Watch</div>
                     </div>
                     <div className="listactionmenu-row divider">
                         <div className="divider-container"></div>
@@ -270,7 +259,7 @@ export const ListActionMenu: React.FC<listActionMenuProps> = ({boardName, list, 
                         {
                             state.boards.find( board => board.boardName === boardName)
                                         ?.lists.map( l => (
-                                            <div className={`selectionlist-item ${l.listName === list.listName ? 'muted' : undefined}`} onClick={() => moveAllHandler(l.listName)}>{l.listName}{l.listName === list.listName ? '-(current)' : undefined}</div>
+                                            <div className={`selectionlist-item ${l.listName === list.listName ? 'muted' : undefined}`} onClick={() => moveAllHandler(l.id)}>{l.listName}{l.listName === list.listName ? '-(current)' : undefined}</div>
                                         ))
                         }
                     </div>

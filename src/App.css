@@ -18,22 +18,23 @@
 
 
 .app-header {
-  padding: 1.5rem;
+  display: none;
+  padding: 1rem;
   background-color: #505f79e6;
 }
 .app {
-  max-height: 100vh;
-  height: 100vh;
   display: flex;
-  border-top: 2px solid black;
+  border: 5px solid rgb(255, 255, 255);
 
 }
 
 
 .app-main {
+  flex: 1;
   width: 100%;
-  overflow: scroll;
-
+  height: 100vh;
+  overflow-x: scroll;
+  overflow-y: hidden;
 }
 
 
@@ -47,18 +48,131 @@
   width: 100%;
 }
 
-.flexed {
+.app-main--header .flexed {
   display: flex;
   gap: 1.5em;
+  align-items: center;
 }
 
-.flexed.lhs {
+.app-main--header .flexed.lhs {
   margin-left: 1rem;
 }
 
-.flexed.rhs {
+.app-main--header .boardName {
+  font-size: 18px;
+  font-weight: bold;
+  line-height: 32px;
+}
+
+.app-main--header .favoriteAction {
+  position: relative;
+}
+
+.app-main--header .favoriteAction--text {
+  display: none;
+  position: absolute; 
+  background-color: rgba(0, 0, 0, 0.712);
+  color: white;
+  top: 1.8rem;
+  left: 1rem;
+  padding: 1rem;
+  white-space: nowrap;
+  z-index: 4;
+  font-weight: 700;
+}
+
+.app-main--header .favoriteAction:hover svg {
+  transform: scaleY(1.2) scaleX(1.2);
+  cursor: pointer;
+}
+
+.app-main--header .favoriteAction:hover .favoriteAction--text {
+  display: block;
+}
+.app-main--header .flexed.rhs {
+  position: relative;
   margin-right: 0.5rem;
 }
+
+.app-main--header .flexed.rhs .boardwatching {
+  padding: 0.35rem;
+  border-radius: 5px;
+  position: relative;
+  display: flex;
+  gap: 5px;
+  align-items: flex-start;
+  cursor: pointer;
+
+}
+
+
+.boardwatching-message {
+  padding-top: 3px;
+  font-size: 14px;
+}
+
+.boardwatching-message--absolute {
+  position: absolute;
+  top: 0;
+  left: 0;
+  padding: 0.5rem;
+  background-color: black;
+  color: white;
+  font-weight: 700;
+  text-transform: capitalize;
+  z-index: -1;
+  /* transition: top 0.7s, left 0.5s; */
+  font-size: 14px;
+}
+
+.boardwatching-message--absolute--modal {
+  position: absolute;
+  top: 3.5rem;
+  left: -10rem;
+  width: 300px;
+
+  background-color: white;
+  color: black;
+  border: 2px solid black;
+  border-radius: 10px;
+  z-index: 6;
+  padding: 1rem;
+}
+
+.boardwatching-message--absolute--modal .bwmam-row.flexed {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 600;
+}
+.boardwatching-message--absolute--modal .bwmam-row.flexed .zero {
+  flex-basis: 30px;
+}
+
+
+.boardwatching-message--absolute--modal .bwmam-row.w-100 button.btn-danger {
+  width: 100%;
+} 
+
+.boardwatching-message--absolute--modal .bwmam-row.text {
+  white-space: nowrap;
+  font-size: 14px;
+  color : rgb(23, 43, 77);
+  margin-bottom: 0.75rem;
+}
+
+.app-main--header .flexed.rhs .boardwatching:hover {
+  background-color: white;
+  color: black;
+}
+.app-main--header .flexed.rhs .boardwatching:hover .boardwatching-message--absolute {
+  top: 2.7rem;
+  left: 1rem;
+  z-index: 6; 
+}
+
+
 
 .app-main--body {
 height: 100%;
@@ -178,10 +292,8 @@ transition: background-image 0.5s ease;
   flex: 1;
   color: black;
 }
-.lih-input input {
+.lih-input {
   width: 100%;
-  border: none;
-  background-color: inherit;
   font-weight: 700;
 }
 
@@ -205,10 +317,6 @@ transition: background-image 0.5s ease;
 
 .list-item--header__absolute .listactionmenu {
   position: relative;
-
-}
-
-.listactionmenu-row {
 
 }
 
@@ -399,9 +507,7 @@ select.movelistselect option.currentboard {
   padding-right: 0.75rem;
 }
 
-.lif-active {
 
-}
 
 .lif-active--row textarea {
   resize: none;
@@ -634,9 +740,6 @@ select.movelistselect option.currentboard {
   padding: 0;
 }
 
-.card-icon svg {
-
-}
 
 .card-icon .card-icon--absolute__message {
   display: none;
@@ -710,4 +813,358 @@ select.movelistselect option.currentboard {
 
 .absolute-notification--container .message span.trees {
   color: green;
+}
+
+
+/* app-menu */
+.app-menu {
+  box-shadow: rgba(9, 30, 66, 0.15) 0px 8px 12px 0px, rgba(9, 30, 66, 0.31) 0px 0px 1px 0px;
+  color: rgb(23, 43, 77);
+  position: relative;
+  transition: width 0.5s ease;
+  font-size: 14px;
+  overflow: hidden;
+}
+
+.boardmenu-view {
+  transition: display 0.5s ease;
+}
+
+.app-menu--row.centered {
+  padding: 0.5rem 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.app-menu--row.centered .magicbtn {
+  position: relative;
+
+}
+
+
+
+
+.app-menu--row.centered .centeredcentered {
+  font-weight: 600;
+  line-height: 20px;
+  font-size: 16px;
+  text-overflow: ellipsis;
+  text-transform: capitalize;
+}
+
+.app-menu--row.centered div:not(.centeredcentered){
+  position: relative;
+  flex-basis: 30px;
+}
+
+.app-menu--row.centered .magicbtn .magicbtn-item {
+  padding: 1rem;
+
+}
+
+.app-menu--row.centered .magicbtn .magicbtn-item-item{
+  position: absolute;
+  top: 0;
+  left: -2.5rem;
+  z-index: -2;
+  transition: left 0.2s, z-index 0.1s;
+}
+
+.app-menu--row.centered .magicbtn .magicbtn-item-item.active {
+  left: 0;
+  z-index: 6;
+}
+
+.app-menu--row.divider {
+  margin: 10px 0;
+  height: 1px;
+  border: 1px solid black;
+}
+
+.app-menu--row.items {
+  padding: 0.5rem 0;
+  display: grid;
+  gap: 0.5rem;
+}
+
+.app-menu--row.items .items-row,
+.app-menu--row.items .items-row2 {
+  padding: 0.5rem;
+  display: grid;
+  grid-template-columns: 30px 1fr;
+  gap: 10px;
+  border-radius: 12px;
+  border: 1px solid transparent;
+  cursor: pointer;
+}
+
+.app-menu--row.items .items-row2 {
+  grid-template-columns: 40px 1fr;
+  cursor: unset;
+
+}
+
+.app-menu--row.items .items-row:hover {
+  background-color: #ebebebba;
+}
+
+
+.items-row--text {
+  padding-top: 3px;
+}
+
+.app-menu--row.items .items-row2 .items-row--text {
+  padding-top: 10px;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 20px;
+  
+}
+
+.items-row--text.watch {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.items-row--text.watch.active::after {
+  content: "\2713";
+ 
+  
+}
+
+.boardabout-textarea textarea {
+  resize: none;
+  width: 100%;
+  height: 100px;
+  background-color: rgb(255, 255, 255);
+  border: 1px solid transparent;
+  padding: 5px;
+  outline: 1px solid black;
+}
+
+.boardabout-textarea textarea:focus {
+  outline: 2px solid blue;
+}
+
+.boardabout-textarea .textarea-placeholder {
+  height: 100px;
+  width: 100%;
+  background-color: #f1f1f1;
+  overflow: hidden;
+  padding: 0.5rem 1rem;
+  font-weight: 600;
+  font-size: 14px;
+  border-radius: 5px;
+  border: 1px solid transparent;
+  cursor: pointer;
+}
+
+.boardabout-textarea .textarea-placeholder:hover {
+  background-color: #0000003d;
+}
+
+.textarea-editor--footer {
+  margin-top: 7px;
+  display: flex;
+  justify-content: space-between;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.textarea-editor--footer .taef-lhs {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.app-menu--row.flexedactivities {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.app-menu--row.flexedactivities button {
+  flex: 1;
+  border-radius: 7px;
+}
+
+/* board background */
+
+.app-menu--row.boardbackground {
+  display: flex;
+  gap: 0.5rem;
+  align-items: flex-start;
+}
+
+.boardbackground-col {
+  
+  flex: 1;
+}
+
+
+.boardbackground-col .boardbackground-block {
+  padding: 1rem;
+  display: grid;
+  gap: 10px;
+  border-radius: 10px;
+}
+.boardbackground-col .boardbackground-block:hover {
+  opacity: 0.75;
+  cursor: pointer;
+}
+
+
+.boardbackground-col.colors .boardbackground-block {
+ 
+  background-image:  linear-gradient(to right bottom, rgb(64, 65, 66), rgb(122, 131, 137), rgb(111, 120, 125), rgb(100, 108, 112), rgb(89, 97, 100));
+
+}
+.boardbackground-col .boardbackground-block .color-block {
+  padding: 0.75rem;
+  background-color: pink;
+  border-radius: 7px;
+  
+}
+
+.boardbackground-text {
+  margin-top: 5px;
+  text-align: center;
+}
+
+.boardbackground .boardbackground-col.photos .grid {
+  border: 1px solid black;
+   display: grid;
+   place-content: center;
+   height: 90px;
+}
+
+.app-menu--row.boardbackgroundselection {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+}
+
+.boardbackgroundselection-divider {
+  margin: 0.35rem;
+  grid-column: 1/-1;
+  height: 1px;
+  border: 1px solid black;
+}
+
+.boardbackgroundselection-fw {
+  grid-column: 1/-1;
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.boardbackgroundselection-item {
+  position: relative;
+  border-radius: 8px;
+  height: 96px;
+}
+
+.boardbackgroundselection-item2 {
+  position: relative;
+  padding: 1.75rem;
+  border-radius: 8px;
+}
+
+.boardbackgroundselection-item:hover,
+.boardbackgroundselection-item2:hover {
+  opacity: 0.75;
+  cursor: pointer;
+}
+
+.boardbackgroundselection-absolute--emoji {
+  position: absolute;
+  left: 0.5rem;
+  bottom: 0.5rem;
+  font-size: 1.5rem;
+}
+
+.boardbackgroundselection-absolute--selected {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+
+/* board menu - labels */
+
+.app-menu--row.boardlabel {
+
+}
+
+.app-menu--row.boardlabel .boardlabel-row.searchinput {
+
+}
+
+.app-menu--row.boardlabel .boardlabel-row.searchinput input[type=search] {
+  width: 100%; 
+  padding: 0.5rem;
+  line-height: 1.25rem;
+}
+
+.app-menu--row.boardlabel .boardlabel-row.labels {
+  margin-top: 0.75rem;
+}
+
+.app-menu--row.boardlabel .boardlabel-row.labels .labels-container {
+  margin-top: 0.5rem;
+  display: grid;
+  gap: 0.5rem;
+  
+}
+
+.app-menu--row.boardlabel .boardlabel-row.labels .labels-container .labels-row {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.app-menu--row.boardlabel .boardlabel-row.labels .labels-container .labels-row .labels-col--color {
+  position: relative;
+  flex: 1;
+  border-radius: 3px;
+  display: flex;
+  align-items: center;
+  padding-left: 10px;
+  font-weight: 700;
+  color: rgb(0, 0, 0);
+}
+
+.app-menu--row.boardlabel .boardlabel-row.labels .labels-container .labels-row .labels-col--color .labels-col--color__absolute.message {
+  display: none;
+  position: absolute;
+  top: 3.2rem;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  white-space: nowrap;
+  z-index: 6;
+  padding: 0.5rem; 
+  background-color: black;
+  color: white;
+}
+
+.app-menu--row.boardlabel .boardlabel-row.labels .labels-container .labels-row .labels-col--color:hover .labels-col--color__absolute.message {
+  display: block;
+}
+
+.app-menu--row.boardlabel .boardlabel-row.labels .labels-container .labels-row .labels-col--btn {
+  padding: 5px;
+  border-radius: 3px;
+}
+
+.app-menu--row.boardlabel .boardlabel-row.labels .labels-container .labels-row .labels-col--btn:hover {
+  background-color: #dadada;
+}
+
+.app-menu--row.boardlabel .boardlabel-row.buttons {
+  margin-top: 1.4rem;
+  display: grid;
+  gap: 0.65rem;
 }
