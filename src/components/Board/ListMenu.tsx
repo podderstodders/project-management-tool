@@ -8,7 +8,6 @@ const listColorPalette = ['#EE7EA0', '#ffA9BA', '#EA7D70', '#F69F95', '#ffAf6E',
 //helper function that moves an item from one index to another 
 
 
-
 type listActionMenuProps = {
     list: listProps
     addCardToggleHandler: () => void
@@ -42,6 +41,21 @@ export const ListActionMenu: React.FC<listActionMenuProps> = ({list, addCardTogg
                 copyList(newList)
             }, 2000)
         }
+    }
+    const getListLengthFromBoardName = (name: string) => {
+        const listLength = state.boards.find( (b) => b.boardName === name)
+    }
+    const [moveList, setMoveList] = useState({
+        boardname: state.currentBoard.boardName, 
+        position: -1 
+    })
+
+    const boardNameSelectHandler = (event: React.ChangeEvent<HTMLSelectElement>) => {
+        setMoveList({...moveList, boardname: event.target.value})
+    }
+
+    const boardPositionSelectHandler = (event: React.ChangeEvent<HTMLSelectElement>) => {
+        setMoveList({...moveList, position: Number(event.target.value)})
     }
 
     //id refers to the destination list 
@@ -198,7 +212,37 @@ export const ListActionMenu: React.FC<listActionMenuProps> = ({list, addCardTogg
                     </div>
                 </div>
             }
-           
+
+{
+                currentState === 'move'
+                && 
+                <div className="listactionmenu movelist">
+                    <div className="listactionmenu-row header movelist">
+                        <button className="btn-nobg" onClick={() => setCurrentState('menu')}>{`<`}</button>
+                        <span>Move list</span>
+                        <button className="btn-nobg" onClick={parentCloseHandler}>x</button>
+                    </div>
+                    <div className="listactionmenu-row selection movelist">
+                        <p>Board</p>
+                        <select name="" id="" className="movelistselect">
+                            {
+                                state.boards.map( (board, i) => (
+                                                <option value={board.boardName} key={i}>{board.boardName}</option>
+                                            ))
+                            }
+                        </select>
+                    </div>
+                    <div className="listactionmenu-row selection movelist">
+                        <p>Position</p>
+                        <select name="" id="" >
+                          
+                        </select>
+                    </div>
+                    <div className="listactionmenu-row button movelist">
+                        <button className="btn-primary">Move</button>
+                    </div>
+                </div>
+            }
         
 
             {

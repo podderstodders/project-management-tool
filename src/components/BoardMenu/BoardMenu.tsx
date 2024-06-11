@@ -5,6 +5,7 @@ import { UseBoardContext } from "../../context/boardcontext"
 import { BoardActivity } from "./BoardActivity"
 import { BoardBackground } from "./BoardBackground"
 import { BoardLabels } from "./BoardLabels"
+import { BoardArchive } from "./BoardArchive"
 
 
 type boardMenuProps = {
@@ -44,6 +45,7 @@ export const BoardMenu: React.FC<boardMenuProps> = ({active}) => {
           <BoardActivity state={currentState} />
           <BoardBackground boardState={currentState}/>
           <BoardLabels boardState={currentState}/>
+          <BoardArchive boardState={currentState} />
       </article>
     )
 }

@@ -536,7 +536,7 @@ notification messages for updating boardAbout
 for List:
 	- sort by -> have included a date property. 
 		- now just need to sort hte list and call the dispatch to update the list? 
-		- and also set a notification message 
+		- and also set a notification message -> done () 
 
 	- Move list: hmmm - feels like this is the hardest implementation. removed this feature. 
 
@@ -554,4 +554,10 @@ A couple of components in BoardContainer, that still recieves boardName as a pro
 
 Just fixed isWatching, which means i could remove the handler within in BoardContainer, and the ListMenu would not recieve any handlers to handle their actions, and all i do is useReducer. Very cool.
 
+finsiehd sorting, pretty easy implementation. 
 
+moveList, should be easy. 
+
+archive list is next.
+
+then its just doing all the modals 
