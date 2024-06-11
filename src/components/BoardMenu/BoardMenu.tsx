@@ -40,7 +40,7 @@ export const BoardMenu: React.FC<boardMenuProps> = ({active}) => {
           </div>
           <div className="app-menu--row divider"></div>
           <BoardMenuDefaultView currentState={currentState} stateChange={setCurrentState}/>
-          <BoardDescription state={currentState} />
+          <BoardDescription boardState={currentState} />
           <BoardActivity state={currentState} />
           <BoardBackground boardState={currentState}/>
           <BoardLabels boardState={currentState}/>

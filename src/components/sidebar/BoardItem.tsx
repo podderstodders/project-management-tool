@@ -10,6 +10,8 @@ type boardContainerProps = {
 export const SidebarBoardContainer: React.FC<boardContainerProps> = ({ current, changeBoardHandler, newBoardToggle}) => {
     const {state, dispatch} = UseBoardContext()
     const filtered = state.boards.sort( (a,b) => Number(b.isFavorite) - Number(a.isFavorite))
+
+    
     return (
         <div className="app-sidebar--body">
             <div className="app-sidebar-row header flexed">

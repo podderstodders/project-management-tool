@@ -22,7 +22,9 @@ function App() {
   const [sidebarInstructionToggle, setSidebarInstructionToggle] = useState(false)
   const [newBoardToggle, setNewBoardToggle] = useState(false)
  
-  const changeBoard = (boardname: string) => {
+  const changeBoard = async (boardname: string) => {
+    
+    await delay(500)
     dispatch({type: 'LOAD_BOARD', payload: {board: currentBoard, boardName: boardname}})
   }
   const sidebarToggleHandler = () => {
@@ -40,7 +42,7 @@ function App() {
   const addNewBoardHandler = async (boardName: string, colors: boardColorProps) => {
 
     dispatch({type: 'UPDATE_HAPPENING', payload: true})
-    dispatch({type: 'TOGGLE_BOARD_MENU'})
+    dispatch({type: 'TOGGLE_BOARD_MENU', payload: false})
     await delay(2000);
     dispatch({type: 'UPDATE_HAPPENING', payload: false})
     setNewBoardToggle(false)

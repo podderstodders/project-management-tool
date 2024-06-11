@@ -406,14 +406,29 @@ export const initialTrelloState = [
   }
 ] as boardProps[];
 
+const randomDate = () => {
+  const start = "2024-06-01"
+  const end = "2024-06-10"
+  const startTimestamp = new Date(start).getTime() 
+  const endTimestamp = new Date(end).getTime();
+  const randomTimestamp = Math.floor(Math.random() * (endTimestamp - startTimestamp + 1)) + startTimestamp;
+  const randomDate = new Date(randomTimestamp);
+  return randomDate.toISOString();
+}
+
 export const updatedTrelloState = initialTrelloState.map( (board, index) => ({
   ...board,
   id: index,
   lists: board.lists.map( (list, listIndex) => ({
     ...list,
-    id: listIndex
+    id: listIndex,
+    items: list.items.map( (card) => ({
+      ...card,
+      dateCreated: randomDate()
+    }))
   }))
 }))
+
   
 export const getBoardByName = (name: string) => {
   const filtered = initialTrelloState.filter ( (b) => b.boardName === name)

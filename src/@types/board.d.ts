@@ -3,7 +3,8 @@ export type listProps = {
     id: number
     listName: string 
     items: Array<cardProps>
-    isWatching?: boolean 
+    isWatching: boolean,
+    listColor: string | undefined
 }
 
 
@@ -27,7 +28,7 @@ export type cardLabelProps = {
 export type boardProps = {
     id: number
     boardName: string,
-    isFavorite: false, 
+    isFavorite: boolean, 
     description: string, 
     isWatching: boolean
     lists: Array<listProps>
@@ -49,6 +50,7 @@ export type cardProps = {
     labels: Array<cardLabelProps>,
     coverProperties?: coverPropertiesProps
     checklists?: Array<checkListProps>
+    dateCreated: string
 }
 
 

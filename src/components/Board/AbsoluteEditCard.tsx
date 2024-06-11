@@ -48,18 +48,12 @@ export const AbsoluteEditCard: React.FC<absoluteEditCardProps> = ({isActive, car
                         <span>&#128513;</span>
                         <span>Edit labels</span>
                     </div>
-                    <div className="editcard-menu--item">
-                        <span>&#128514;</span>
-                        <span>Change members</span>
-                    </div>
+                    
                     <div className="editcard-menu--item">
                         <span>&#128515;</span>
                         <span>Change cover</span>
                     </div>
-                    <div className="editcard-menu--item">
-                        <span>&#128517;</span>
-                        <span>Move</span>
-                    </div>
+                   
                     <div className="editcard-menu--item">
                         <span>&#128518;</span>
                         <span>Copy</span>

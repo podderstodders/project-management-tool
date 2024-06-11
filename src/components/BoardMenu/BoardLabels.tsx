@@ -1,5 +1,5 @@
 
-
+import {useState, useEffect} from "react"
 import { UseBoardContext } from "../../context/boardcontext"
 
 type boardLabelProps = {
@@ -8,12 +8,13 @@ type boardLabelProps = {
 
 export const BoardLabels: React.FC<boardLabelProps> = ({boardState}) => {
     const {state} = UseBoardContext() 
-   
-    const activeLabels = state.currentBoard.lists.flatMap( (list) => 
+    const [localCurrentBoard, setLocalCurrentBoard] = useState(state.currentBoard)
+    const activeLabels = localCurrentBoard.lists.flatMap( (list) => 
         list.items.flatMap( (card) => 
-            card.labels.filter(label => label.labelIsChecked)
+            card.labels.filter(label => label.labelIsChecked === true)
         )
-    )
+    )   
+    console.log(activeLabels)
 
     activeLabels.sort( (a,b) => {
        
@@ -22,6 +23,11 @@ export const BoardLabels: React.FC<boardLabelProps> = ({boardState}) => {
         return 0;
  
     })
+    console.log(activeLabels.length)
+
+    useEffect( () => {
+        setLocalCurrentBoard(state.currentBoard)
+    }, [state.currentBoard])
 
     
     if(boardState !== 'labels') return null 
@@ -39,8 +45,8 @@ export const BoardLabels: React.FC<boardLabelProps> = ({boardState}) => {
 
                 <div className="labels-container">
                     {
-                        activeLabels.map( (label) => (
-                            <div className="labels-row" key={label.labelIndex}>
+                        activeLabels.map( (label, index) => (
+                            <div className="labels-row" key={index}>
                                 <div className="labels-col--color" style={{backgroundColor: label.labelColorCode}}>
                                     {
                                         label.labelTitle

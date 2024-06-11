@@ -66,6 +66,7 @@
 
 .app-main--header .favoriteAction {
   position: relative;
+  padding-bottom: 5px;
 }
 
 .app-main--header .favoriteAction--text {
@@ -92,17 +93,19 @@
 .app-main--header .flexed.rhs {
   position: relative;
   margin-right: 0.5rem;
+
 }
 
 .app-main--header .flexed.rhs .boardwatching {
-  padding: 0.35rem;
+ 
   border-radius: 5px;
   position: relative;
   display: flex;
   gap: 5px;
   align-items: flex-start;
   cursor: pointer;
-
+  padding: 5px;
+  padding-bottom: 9px;
 }
 
 
@@ -425,6 +428,33 @@ select.movelistselect option.currentboard {
   font-size: 0.9rem;
 }
 
+.listactionmenu-row.listcolor .listcolor-row.grid {
+  margin-top: 0.3rem;
+  display: grid;
+  grid-template-columns: repeat(5, minmax(25px, 1fr));
+  gap: 5px;
+
+}
+
+.listcolor-col {
+  padding: 2px;
+  border: 1px solid transparent;
+  cursor: pointer;
+}
+
+.listcolor-col .colcoloritem {
+  padding: 0.75rem 1rem;
+  background-color: #505f79be;
+;
+}
+.listactionmenu-row.listcolor .listcolor-row.buttons {
+  margin-top: 0.5rem;
+}
+.listactionmenu-row.listcolor .listcolor-row.buttons button {
+  
+  width: 100%;
+}
+
 .link-item {
   padding: 0.4rem 0.5rem;
  
@@ -699,7 +729,7 @@ select.movelistselect option.currentboard {
 .editcard-absolute--menu {
   position: absolute;
   top: 0;
-  right: -11rem;
+  right: -9.3rem;
 }
 
 .editcard-menu--container {
@@ -1167,4 +1197,62 @@ select.movelistselect option.currentboard {
   margin-top: 1.4rem;
   display: grid;
   gap: 0.65rem;
+}
+
+
+/* title about */
+
+.app-menu--row.titleAbout {
+  display: grid;
+  gap: 0.5rem;
+}
+
+.titleAbout-row.flexed {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.titleAbout-row.flexed .titleAbout-flexed--lhs {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 20px;
+}
+
+.titleAbout-row.editable {
+
+  position: relative;
+
+
+  min-height: 70px;
+  cursor: pointer;
+
+}
+
+
+
+.titleAbout-row.texteditor  {
+  outline: 2px solid transparent;
+}
+.titleAbout-row.texteditor textarea {
+  resize: none;
+  width: 100%;
+  outline: 2px solid black;
+  border: 0;
+  padding-left: 0.5rem;
+  padding-top: 0.4rem;
+}
+
+.titleAbout-row.texteditor textarea:focus {
+  outline: 2px solid rgb(0, 132, 255);
+}
+
+.titleAbout-row.texteditor .texteditor-actions {
+  margin-top: 0.5rem;
+  display: flex;
+  gap: 1rem;
+  align-items: center;
 }

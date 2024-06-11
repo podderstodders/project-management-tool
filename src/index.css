@@ -184,6 +184,14 @@ button .erect {
   width: 100%;
 }
 
+button.disabled {
+  background-color: #ebebeb;
+  color: #909090;
+  border: 1px solid transparent;
+  outline: none;
+  cursor: not-allowed;
+}
+
 button.btn-nobg {
   background-color: transparent;
   color: black;

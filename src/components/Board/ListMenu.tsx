@@ -1,50 +1,26 @@
 
 import { ReactNode, useState } from "react"
-import { boardProps, listProps } from "../../@types/board"
+import { listProps } from "../../@types/board"
 import { LoadingAnimation } from "./LoadingAnimation"
 import { UseBoardContext } from "../../context/boardcontext"
 
-
+const listColorPalette = ['#EE7EA0', '#ffA9BA', '#EA7D70', '#F69F95', '#ffAf6E', '#FFCC80', '#7D88E0', '#B5BEFS', '#ABCDDE', '#CDBDEB']
 //helper function that moves an item from one index to another 
 
-const moveListInPlace = (lists: listProps[], fromIndex: number, toIndex: number) => {
-    const copy = [...lists]
-    if(fromIndex >= 0 && fromIndex <  copy.length && toIndex >= 0 && toIndex < copy.length) {
-        //equivalent to doing const item = copy.splice(fromIndex, 1)[0] 
-        const [item] = copy.splice(fromIndex, 1)
-        copy.splice(toIndex, 0, item)
-    }
 
-    return copy 
-}
-
-
-//helper function, returns an array of options based on the boardName
-const BoardPositions = (boardName: string, boards: boardProps[]) => {
-
-    const board = boards.find( (board) => board.boardName === boardName)
-    if(!board){
-       throw new Error('wtf')
-    } 
-    return board.lists.length 
-}
 
 type listActionMenuProps = {
-    boardName: string 
     list: listProps
-    listIndex: number 
     addCardToggleHandler: () => void
     parentCloseHandler: () => void;
     copyList: (list: listProps) => void;
-    setNotification: (str: ReactNode) => void 
-    setWatching: (listIndex: number, isWatching: boolean) => void;
+    setNotification: (str: ReactNode, type: string) => void 
 }
 
 type listActionMenuStatesProps = 'menu' | 'add' | 'copy' | 'move' | 'moveAll' | 'sort'
 
 
-export const ListActionMenu: React.FC<listActionMenuProps> = ({boardName, list, listIndex, addCardToggleHandler, parentCloseHandler, copyList, setNotification, setWatching}) => {
-    console.log('on mount list index is ', listIndex)
+export const ListActionMenu: React.FC<listActionMenuProps> = ({list, addCardToggleHandler, parentCloseHandler, copyList, setNotification}) => {
     // const listActionMenuStates = ['menu', 'add', 'copy', 'move', 'moveAll', 'sort']
     const {state, dispatch} = UseBoardContext() 
     const [currentState, setCurrentState] = useState<listActionMenuStatesProps>('menu')
@@ -60,7 +36,7 @@ export const ListActionMenu: React.FC<listActionMenuProps> = ({boardName, list, 
             setCopyListSubmitPorn(true)
             const newList = {...list, listName: copyListName, id: state.currentBoard.lists.length} as listProps
             const inlineNotificationMessage = <span>Copying list <span className="blood underlined">{list.listName}</span> to new list <span className="trees underlined">{copyListName}</span></span>
-            setNotification(inlineNotificationMessage)
+            setNotification(inlineNotificationMessage, 'success')
             setTimeout( () => {
                 setCopyListSubmitPorn(false)
                 copyList(newList)
@@ -68,90 +44,74 @@ export const ListActionMenu: React.FC<listActionMenuProps> = ({boardName, list, 
         }
     }
 
-     // end of copy list name tings 
-     //initially its set to the current boardName 
-     //position can be the prop listIndex, because to invoke this movelist feature,
-     // this component would need to be toggle, and we have the specific list index. 
-     const [moveListVals, setMoveListVals] = useState({
-        boardName: boardName,
-        position: listIndex 
-     })
-
-     const moveListBoardSelectHandler = (event: React.ChangeEvent<HTMLSelectElement>) => {
-            console.log('board selected: ', event.target.value)
-            setMoveListVals({...moveListVals, boardName: event.target.value})
-     }
-
-     const moveListBoardPositionSelectHandler = (event: React.ChangeEvent<HTMLSelectElement>) => {
-        console.log('Board position selected: ', event.target.value)
-        setMoveListVals({...moveListVals, position: Number(event.target.value)})
-    }
-
-    //confusing b/c im rendering index + 1, and also the key value was i+1, instead of i.
-    // <option key={i}>{i+1}</option> is more correct
-
-    const moveListHandler = () => {
-        console.log('initial horny')
-        console.log('list index is ', listIndex, 'selected index is ', moveListVals.position)
-        if(moveListVals.boardName !== boardName){
-            //delete from current list 
-            //splice into other list 
-            setMoveListVals({boardName: list.listName, position: -1})
-        } else {
-            if(moveListVals.position !== listIndex) {
-                  //source index - listIndex 
-                  // destination Index - moveListVals.position 
-                  //move within the same list 
-                  const board = state.boards.find( (board) => board.boardName === boardName)
-                  if(board) {
-                    const lists = moveListInPlace(board.lists, listIndex, moveListVals.position)
-                    dispatch({type: 'UPDATE_LISTS', payload:  lists})
-                  }
-                  parentCloseHandler()
-                  setMoveListVals({boardName: list.listName, position: -1})
-            } else {
-                //do nothing 
-                const {boardName, position} = moveListVals 
-                console.log(`${boardName} - position:${position} is happening`)
-                console.log('do nothing horny')
-                parentCloseHandler() 
-                setMoveListVals({boardName: list.listName, position: -1})
-            }
-            
-        }
-    }
+    //id refers to the destination list 
 
     const moveAllHandler = (id: number) => {
-        if(id > 0) {
-            const theBoard = state.boards.find( (board) => board.boardName === boardName)
-            if(theBoard) {
-                const theList = theBoard.lists.map( (lll) => {
-                    if(lll.id === list.id) {
-                        return {...lll, items: []}
-                    } else if(lll.id === id){
-                        return {...lll, items: [...lll.items, ...list.items]}
-                    } else {
-                        return lll
-                    }
-                })
-                dispatch({type: "UPDATE_LISTS", payload: theList})
-                parentCloseHandler()
-                const inlineMessage = <span>Moving all items from <span className="underlined">{list.listName}</span> to <span className="green underlined">list {id}</span></span>
-                setNotification(inlineMessage)
+        const updatedLists = state.currentBoard.lists.map( (local) => {
+            if(local.id === list.id) {
+                return {...local, items: []}
+            } else if(local.id === id) {
+                return {...local, items: [...local.items, ...list.items]}
+            } else {
+                return local
             }
+        })
+        dispatch({type: "UPDATE_LISTS", payload: updatedLists})
+        parentCloseHandler()
+        const inlineMessage = <span>Moving all items from <span className="underlined">{list.listName}</span> to <span className="green underlined">list {id}</span></span>
+        setNotification(inlineMessage, 'warning')
+       
+    }
+
+    const listWatchHandler = () => {
+        if(!list.isWatching) {
+            dispatch({type: 'UPDATE_LIST', payload: {...list, isWatching: true}})
+            const inlineMessage = <span>Now watching <span className="green underlined">{list.listName}</span></span>
+            setNotification(inlineMessage, 'success')
+        } else {
+            dispatch({type: 'UPDATE_LIST', payload: {...list, isWatching: false}})
+            const inlineMessage = <span>No more watching of <span className="red underlined">{list.listName}</span></span>
+            setNotification(inlineMessage, 'info')
+        }
+    }
+    const delay = (ms: number) => new Promise( resolve => setTimeout(resolve, ms))
+    const listColorChange = async (color: string) => {
+        if(color.length > 0){
+            const updatedList = {...list, listColor: color}
+            await delay(500)
+            dispatch({type: 'UPDATE_LIST', payload: updatedList})
         }
     }
 
-    const listWatchHandler = (listIndex: number) => {
-        if(!list.isWatching) {
-            setWatching(listIndex, true)
-            const inlineMessage = <span>Now watching <span className="green underlined">{list.listName}</span></span>
-            setNotification(inlineMessage)
-        } else {
-            setWatching(listIndex, false)
-            const inlineMessage = <span>No more watching of <span className="red underlined">{list.listName}</span></span>
-            setNotification(inlineMessage)
+    const removeListColorChange = async () => {
+        const updatedList = {...list, listColor: undefined}
+        dispatch({type: 'UPDATE_LIST', payload: updatedList})
+    }
+
+    //sorting function 
+    const sortList = (type: string) => {
+        switch(type) {
+            case 'ascending':
+                return list.items.sort((a, b) => new Date(a.dateCreated).getTime() - new Date(b.dateCreated).getTime());
+            case 'descending':
+                return list.items.sort((a, b) => new Date(b.dateCreated).getTime() - new Date(a.dateCreated).getTime());
+            case 'name':
+                return list.items.sort((a, b) => a.title.localeCompare(b.title));
+            default:
+                return list.items
         }
+    }
+
+    const sortListHandler =async  (type: string) => {
+        const sortedList = sortList(type) 
+        const updatedList = {...list, items: sortedList}
+        dispatch({type: 'UPDATE_LIST', payload: updatedList})
+        parentCloseHandler() 
+        let inlineMessage = <span>Sorting List</span>
+        setNotification(inlineMessage, 'warning')
+        await delay(2000)
+        inlineMessage = <span>Listed Successfully Sorted!</span>
+        setNotification(inlineMessage, 'success')
     }
 
     return ( 
@@ -165,23 +125,47 @@ export const ListActionMenu: React.FC<listActionMenuProps> = ({boardName, list, 
     
                         <div className="link-item" onClick={addCardToggleHandler}>Add card</div>
                         <div className="link-item" onClick={() => setCurrentState('copy')}>Copy list</div>
-                        <div className="link-item" onClick={() => setCurrentState('move')}>Move list</div>
-                        <div className={`link-item ${list.items.length === 0 ? 'empty' : undefined}`} onClick={list.items.length > 0 ? () => setCurrentState('moveAll') : undefined}>Move all cards in this list</div>
-                        <div className="link-item" onClick={() => setCurrentState('sort')}>Sort by ...</div>
-                        <div className={`link-item ${list.isWatching ? 'watchActive' : undefined}`} onClick={() => listWatchHandler(list.id)}>Watch</div>
+                        {
+                            list.items.length > 0 
+                            && 
+                            <>
+                            <div className={`link-item`} onClick={() => setCurrentState('move')}>Move list</div>
+                            <div className={`link-item`} onClick={() => setCurrentState('moveAll')}>Move all cards in this list</div>
+                            <div className="link-item" onClick={() => setCurrentState('sort')}>Sort by ...</div>
+                            </>  
+                        }
+                        <div className={`link-item ${list.isWatching ? 'watchActive' : undefined}`} onClick={() => listWatchHandler()}>Watch</div>
                     </div>
                     <div className="listactionmenu-row divider">
                         <div className="divider-container"></div>
                     </div>
                     <div className="listactionmenu-row listcolor">
                         <p>Change list color</p>
+                        <div className="listcolor-row grid">
+                        
+                            {
+                                listColorPalette.map( (color, i) => (
+                                    <div key={i} className="listcolor-col" style={{border: list.listColor === color ? '1px solid black' : '1px solid transparent'}}>
+                                        <div className="colcoloritem" style={{backgroundColor: color}} onClick={() => listColorChange(color)}></div>
+                                    </div>
+                                ))
+                            }
+                           
+                        </div>
+                        <div className="listcolor-row buttons">
+                            <button className={`btn-darker ${list.listColor === undefined ? 'disabled' : undefined}`} onClick={removeListColorChange}>x Remove Color</button>
+                        </div>
                     </div>
                     <div className="listactionmenu-row divider">
                         <div className="divider-container"></div>
                     </div>
                     <div className="listactionmenu-row links">
                         <div className="link-item">Archive this list</div>
-                        <div className="link-item">Archive all cards in this list</div>
+                        {
+                            list.items.length > 0 
+                            && 
+                            <div className="link-item">Archive all cards in this list</div>
+                        }
                     </div>
                     <div className="listactionmenu-absolute--exitbtn">
                         <button className="btn-nobg" onClick={parentCloseHandler}>x</button>
@@ -215,36 +199,7 @@ export const ListActionMenu: React.FC<listActionMenuProps> = ({boardName, list, 
                 </div>
             }
            
-            {
-                currentState === 'move'
-                && 
-                <div className="listactionmenu movelist">
-                    <div className="listactionmenu-row header movelist">
-                        <button className="btn-nobg" onClick={() => setCurrentState('menu')}>{`<`}</button>
-                        <span>Move list</span>
-                        <button className="btn-nobg" onClick={parentCloseHandler}>x</button>
-                    </div>
-                    <div className="listactionmenu-row selection movelist">
-                        <p>Board</p>
-                        <select name="" id="" className="movelistselect" onChange={moveListBoardSelectHandler}>
-                            {
-                                state.boards.map( (board) => <option value={board.boardName} style={{color: board.boardName === boardName ? 'red': undefined}}>{board.boardName}{board.boardName === boardName ? ' - (current)' : undefined}</option>)
-                            }
-                        </select>
-                    </div>
-                    <div className="listactionmenu-row selection movelist">
-                        <p>Position</p>
-                        <select name="" id="" onChange={moveListBoardPositionSelectHandler}>
-                           {
-                             Array(BoardPositions(moveListVals.boardName, state.boards)).fill(69).map((n, i) => <option value={i}>{i + 1}{i === listIndex && moveListVals.boardName === boardName ? ' - (current)' : undefined}</option>)
-                           }
-                        </select>
-                    </div>
-                    <div className="listactionmenu-row button movelist">
-                        <button className="btn-primary" onClick={moveListHandler}>Move</button>
-                    </div>
-                </div>
-            }
+        
 
             {
                 currentState === 'moveAll'
@@ -257,10 +212,9 @@ export const ListActionMenu: React.FC<listActionMenuProps> = ({boardName, list, 
                     </div>
                     <div className="listactionmenu-row selectionlist moveAll">
                         {
-                            state.boards.find( board => board.boardName === boardName)
-                                        ?.lists.map( l => (
-                                            <div className={`selectionlist-item ${l.listName === list.listName ? 'muted' : undefined}`} onClick={() => moveAllHandler(l.id)}>{l.listName}{l.listName === list.listName ? '-(current)' : undefined}</div>
-                                        ))
+                            state.currentBoard.lists.map( (l) => (
+                                <div className={`selectionlist-item ${l.listName === list.listName ? 'muted' : undefined}`} onClick={() => moveAllHandler(l.id)}>{l.listName}{l.listName === list.listName ? '-(current)' : undefined}</div>
+                            ))
                         }
                     </div>
                 </div>
@@ -276,9 +230,9 @@ export const ListActionMenu: React.FC<listActionMenuProps> = ({boardName, list, 
                         <button className="btn-nobg" onClick={parentCloseHandler}>x</button>
                     </div>
                     <div className="listactionmenu-row selectionlist moveAll">
-                        <div className="selectionlist-item">Date created (newest first)</div>
-                        <div className="selectionlist-item">Date created (oldest first)</div>
-                        <div className="selectionlist-item">Card name (alphabetically)</div>
+                        <div className="selectionlist-item" onClick={() => sortListHandler('ascending')}>Date created (newest first)</div>
+                        <div className="selectionlist-item" onClick={() => sortListHandler('descending')}>Date created (oldest first)</div>
+                        <div className="selectionlist-item" onClick={() => sortListHandler('name')}>Card name (alphabetically)</div>
                     </div>
                 </div>
             }

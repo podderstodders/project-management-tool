@@ -24,9 +24,9 @@ const initialState: BoardState = {
     boards: updatedTrelloState,
     currentBoard: updatedTrelloState[0],
     colors: {
-        headerColor: '',
-        asideColor: '',
-        mainGradient: ''
+        headerColor: updatedTrelloState[0].boardColor.primary,
+        asideColor: updatedTrelloState[0].boardColor.primary,
+        mainGradient: updatedTrelloState[0].boardColor.gradient
     },
     isAddBoardHappening: false,
     boardMenuToggle: false 
@@ -49,7 +49,7 @@ type BoardAction =
     | {type: 'UPDATE_BG_GRADIENT'; payload: string}
     | {type: 'UPDATE_COLORS'; payload: boardColorProps}
     | {type: 'LOAD_BOARD'; payload: {board: boardProps, boardName: string}}
-    | {type: 'TOGGLE_BOARD_MENU'}
+    | {type: 'TOGGLE_BOARD_MENU'; payload: boolean}
 
 const boardReducer = (state: BoardState, action: BoardAction): BoardState => {
     switch(action.type) {
@@ -132,7 +132,12 @@ const updateCurrentBoard = (state: BoardState, action: BoardAction): BoardState 
     if(action.type !== 'UPDATE_CURRENT_BOARD') return state 
     return {
         ...state,
-        currentBoard: action.payload,
+        boards: state.boards.map( (board) => 
+            board.id === action.payload.id 
+            ? action.payload
+            : board
+        ),
+        currentBoard: action.payload
 
     }
 }
@@ -156,7 +161,7 @@ const updateList = (state: BoardState, action: BoardAction): BoardState => {
         currentBoard: {
             ...state.currentBoard,
             lists: state.currentBoard.lists.map( (list) => 
-                list.listName === action.payload.listName ? action.payload : list
+                list.id === action.payload.id ? action.payload : list
             )
         }
     }
@@ -175,13 +180,14 @@ const updateLists = (state: BoardState, action: BoardAction): BoardState => {
 
 const addCard = (state: BoardState, action: BoardAction): BoardState => {
     if(action.type !== 'ADD_CARD') return state 
-
+    const ww = new Date() 
     const newCard = {
         id: Math.floor(Math.random() * (1000 - 30)) + (30 + 1),
         title: action.payload.cardTitle,
         description: '',
         isWatching: false, 
-        labels: [] 
+        labels: [], 
+        dateCreated: ww.toISOString()
     } as cardProps
 
     return {
@@ -199,13 +205,15 @@ const addCardFront = (state: BoardState, action: BoardAction): BoardState => {
     if(action.type !== 'ADD_CARD_FRONT') return state 
 
     //need to generate an Id, set description to '', isWatching to false, and labels to be null 
-    console.log('title before adding is: ', action.payload.cardTitle)
+
+    const ww = new Date() 
     const newCard = {
         id: Math.floor(Math.random() * (10000 - 30)) + (30 + 1),
         title: cleanString(action.payload.cardTitle),
         description: '',
         isWatching: false, 
-        labels: [] 
+        labels: [],
+        dateCreated: ww.toISOString()
     } as cardProps
     return {
         ...state,
@@ -336,6 +344,6 @@ const boardMenuToggler = (state: BoardState, action: BoardAction): BoardState =>
     if(action.type !== 'TOGGLE_BOARD_MENU') return state 
     return {
         ...state, 
-        boardMenuToggle: !state.boardMenuToggle
+        boardMenuToggle: action.payload
     }
 }

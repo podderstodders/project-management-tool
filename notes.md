@@ -448,4 +448,110 @@ implemented:
 	- about 
 	- activity -> maybe i can do it, idk.
 	- watch 
-	
+
+
+June 10 - 4:03PM 
+
+working on: 
+
+notification messages for updating boardAbout 
+
+	- passing in a type property to render different type of svgs
+	- might also have different variations of colors..... 
+
+
+for List:
+	- sort by -> have included a date property. 
+		- now just need to sort hte list and call the dispatch to update the list? 
+		- and also set a notification message 
+
+	- Move list: hmmm - feels like this is the hardest implementation. 
+
+
+	- change list color: 
+		- should be fun maybe. 
+
+
+For Board Menu:
+
+	- about functionality -> fixed 8:32 PM 
+
+	- label functionality 
+
+
+uh oh. a bug.
+when changing list, and menu about is active, the about doesnt get the new updated changes. 
+according to trello, when it changes, 
+then close the menu 
+
+in trello, if the menu is open to its default state, and the board is changed, 
+then the board is changed and the menu stays open. 
+
+if the menu is open to a different state, and the board is changed, then the menu is closed, 
+
+the problem is how I'm udating the context of currentBoard, but the changes are not appreant to boards 
+
+Fix: 
+
+	- first updated reducer of update current board, to also update boards property 
+
+	- then in the child component, use useEffect to localize the state. 
+
+
+
+label functionality of board.
+
+labels component should be indepdent from the boards.
+
+it will gather all boards and find all cards that have labels that are active. 
+
+store in the list as a set? 
+
+return those values, limit to 5, clicking on the show more will show the rest. 
+
+
+huh 
+
+textarea with autoFocus, and onBlur={ () => setToggler(false)}
+
+so when textarea is clicked on with autofocus, and onBlur is used when it loses focuses, 
+so what im trying to say is that it seems like 
+
+
+June 11: 3:32 AM
+
+Archive and Archive Items is going to be a big feature to implement. probable a whole ass day. 
+
+so gonna do what I had planned earlier: 
+
+
+working on: 
+
+notification messages for updating boardAbout 
+
+	- passing in a type property to render different type of svgs
+	- might also have different variations of colors..... 
+
+
+for List:
+	- sort by -> have included a date property. 
+		- now just need to sort hte list and call the dispatch to update the list? 
+		- and also set a notification message 
+
+	- Move list: hmmm - feels like this is the hardest implementation. removed this feature. 
+
+	- my move features are having issues.
+
+	- change list color: have completed (:)))
+		- should be fun maybe. 
+
+
+The reason why my move features is buggy, is because its still using boardName, 
+and not context currentBoard lol 
+
+
+A couple of components in BoardContainer, that still recieves boardName as a prop, is not updated with context. 
+
+Just fixed isWatching, which means i could remove the handler within in BoardContainer, and the ListMenu would not recieve any handlers to handle their actions, and all i do is useReducer. Very cool.
+
+
