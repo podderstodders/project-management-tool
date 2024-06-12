@@ -36,6 +36,7 @@ const initialState: BoardState = {
 
 
 type BoardAction = 
+    | {type: 'UPDATE_BOARDS', payload: boardProps[]}
     | {type: 'UPDATE_CURRENT_BOARD', payload: boardProps}
     | {type: 'ADD_BOARD'; payload: boardProps}
     | {type: 'ADD_LIST'; payload:  listProps}
@@ -56,6 +57,8 @@ type BoardAction =
 
 const boardReducer = (state: BoardState, action: BoardAction): BoardState => {
     switch(action.type) {
+        case 'UPDATE_BOARDS':
+            return updateBoards(state, action)
         case 'UPDATE_CURRENT_BOARD':
             return updateCurrentBoard(state, action)
         case 'ADD_BOARD':
@@ -121,13 +124,20 @@ export const UseBoardContext = () => {
 }
 
 
+const updateBoards = (state: BoardState, action: BoardAction): BoardState => {
+    if(action.type !== 'UPDATE_BOARDS') return state;
+    return {
+        ...state, 
+        boards: action.payload
+    }
+}
 
 const addBoard = (state: BoardState, action: BoardAction): BoardState => {
     if(action.type !== 'ADD_BOARD') return state;
     return {
         ...state, 
+        currentBoard: action.payload,
         boards: [...state.boards, action.payload],
-        currentBoard: action.payload
     }
 }
 

@@ -595,4 +595,27 @@ Gonna spend some time now to revise the UI.
 fix the sidebar, 
 
 add thick borders on modals . 
+	- to lazy now 
 
+
+
+Started this project on May 22, 4:31:59 AM 
+
+almost a whole month 
+
+
+June 12, 3:34AM 
+
+	- adding sidebar context toggle, makes it cool that when i click on new list, it closes the sidebar
+
+
+June 12: 5:22AM 
+
+	- a significant bug.
+
+my context initial state, sets currentBoard to be the first value of boards. 
+
+but if the user deletes all the boards, then it breaks. context breaks. 
+
+So i can either stop it and keep at least 1 open. or I change the type of boardContext to be possibly undefined, 
+but that would mean everywhere in my app would break. 

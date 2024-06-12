@@ -51,11 +51,8 @@ const darkenHexColor = (hex: string, amount: number): string => {
   return darkenedHex;
 } 
 
-type boardContainerProps = {
-  tester123: () => void;
-}
 
-export const CurrentBoardContainer: React.FC<boardContainerProps> = () => {
+export const CurrentBoardContainer = () => {
   const {showOverlay, hideOverlay} = UserOverlayContext()
   const {state, dispatch} = UseBoardContext()
   
@@ -431,7 +428,7 @@ export const CurrentBoardContainer: React.FC<boardContainerProps> = () => {
                       && 
                       listMenuToggle.index === index 
                       && 
-                      <ListActionMenu list={list}  addCardToggleHandler={() => newCardToggleHandler(index)} parentCloseHandler={() => setListMenuToggle({active: false, listName: '', index: -1})} copyList={copyListHandler}/> 
+                      <ListActionMenu list={list} listIndex={listMenuToggle.index} addCardToggleHandler={() => newCardToggleHandler(index)} parentCloseHandler={() => setListMenuToggle({active: false, listName: '', index: -1})} copyList={copyListHandler}/> 
                     }
                   </div>
                   <div className="list-item--cards">

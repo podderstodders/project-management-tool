@@ -1,4 +1,4 @@
-import { useState} from "react"
+import { useState, useEffect} from "react"
 import { BoardMenuDefaultView } from "./BoardMenuDefault"
 import { BoardDescription } from "./BoardAbout"
 import { UseBoardContext } from "../../context/boardcontext"
@@ -9,21 +9,23 @@ import { BoardCopyForm } from "./BoardCopy"
 import { BoardRemove } from "./BoardRemove"
 
 
-type boardMenuProps = {
-    active: boolean
-}
 
-export const BoardMenu: React.FC<boardMenuProps> = ({active}) => {
-    const {dispatch} = UseBoardContext() 
+
+export const BoardMenu = () => {
+    const {state, dispatch} = UseBoardContext() 
     const [currentState, setCurrentState] = useState('menu')
     const styles = {
-        width: active ? '340px' : '0',
-        padding: active ? '0.5rem' : '0',
-        overflow: !active ? 'hidden' : undefined,
+        width: state.boardMenuToggle ? '340px' : '0',
+        padding: state.boardMenuToggle ? '0.5rem' : '0',
+        overflow: !state.boardMenuToggle ? 'hidden' : undefined,
     }
     const boardMenuCloserHandler = () => {
       dispatch({type: 'TOGGLE_BOARD_MENU', payload: false})
     }
+
+    useEffect( () => {
+      setCurrentState('menu')
+    }, [state.boardMenuToggle])
 
     return (
         <article className="app-menu" style={styles}>

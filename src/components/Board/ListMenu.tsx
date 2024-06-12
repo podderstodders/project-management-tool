@@ -11,6 +11,7 @@ const listColorPalette = ['#EE7EA0', '#ffA9BA', '#EA7D70', '#F69F95', '#ffAf6E',
 
 type listActionMenuProps = {
     list: listProps
+    listIndex: number
     addCardToggleHandler: () => void
     parentCloseHandler: () => void;
     copyList: (list: listProps) => void;
@@ -19,7 +20,7 @@ type listActionMenuProps = {
 type listActionMenuStatesProps = 'menu' | 'add' | 'copy' | 'move' | 'moveAll' | 'sort'
 
 
-export const ListActionMenu: React.FC<listActionMenuProps> = ({list, addCardToggleHandler, parentCloseHandler, copyList}) => {
+export const ListActionMenu: React.FC<listActionMenuProps> = ({list, listIndex, addCardToggleHandler, parentCloseHandler, copyList}) => {
     // const listActionMenuStates = ['menu', 'add', 'copy', 'move', 'moveAll', 'sort']
     const {state, dispatch} = UseBoardContext() 
     const {showNotification} = UseNotificationContext()
@@ -47,15 +48,59 @@ export const ListActionMenu: React.FC<listActionMenuProps> = ({list, addCardTogg
 
     const [moveList, setMoveList] = useState({
         boardname: state.currentBoard.boardName, 
-        position: -1 
+        positionsLength: state.currentBoard.lists.length,
+        positionIndex: 0
     })
 
     const boardNameSelectHandler = (event: React.ChangeEvent<HTMLSelectElement>) => {
-        setMoveList({...moveList, boardname: event.target.value})
+        const listLength = getBoardListLengthByName(event.target.value)
+        console.log(listLength)
+        setMoveList({...moveList, boardname: event.target.value, positionsLength: listLength })
+        //do something that sets position 
+        
+
     }
 
     const boardPositionSelectHandler = (event: React.ChangeEvent<HTMLSelectElement>) => {
-        setMoveList({...moveList, position: Number(event.target.value)})
+        setMoveList({...moveList, positionIndex: Number(event.target.value)})
+    }
+
+    const getBoardListLengthByName = (name: string) => {
+        return state.boards.filter( (board) => board.boardName === name)[0].lists.length
+    }
+
+    const moveListHandler = () => {
+        console.log(moveList)
+        if(moveList.boardname === state.currentBoard.boardName) {
+            if(listIndex === moveList.positionIndex) {
+                showNotification('cant move it because its the same position bro!', 'error', 2000)
+            } else {
+                //position is different and can move 
+                const tempList = state.currentBoard.lists
+                const list = tempList.splice(listIndex,1)[0]
+                tempList.splice(moveList.positionIndex, 0, list)
+                dispatch({type: 'UPDATE_CURRENT_BOARD', payload: {...state.currentBoard, lists: tempList}})
+                showNotification(`Moving List from position ${listIndex + 1} to ${moveList.positionIndex + 1}`, 'success', 2000)
+                parentCloseHandler()
+            }
+        } else {
+            const updatedCurrentList = state.currentBoard.lists 
+            const removedItem = updatedCurrentList.splice(listIndex, 1)[0]
+            const otherBoard = state.boards.filter( (b) => b.boardName === moveList.boardname)[0]
+            otherBoard.lists.push(removedItem)
+            const updatedBoards = state.boards.map( (b) => {
+                if(b.boardName === otherBoard.boardName){
+                    return otherBoard
+                } else {
+                    return b
+                }
+            })
+            dispatch({type: 'UPDATE_BOARDS', payload: updatedBoards})
+            dispatch({type: 'UPDATE_CURRENT_BOARD', payload: {...state.currentBoard, lists: updatedCurrentList}})
+            showNotification(`Moving List from ${state.currentBoard.boardName} to ${moveList.boardname}`, 'success', 2000)
+            parentCloseHandler()
+
+        }
     }
 
     //id refers to the destination list 
@@ -122,6 +167,10 @@ export const ListActionMenu: React.FC<listActionMenuProps> = ({list, addCardTogg
         await delay(2000)
         showNotification(`Successfully sorted list`, 'success', 2000)
     }
+
+
+    const transformedBoardNames = state.boards.filter( (b) => b.boardName !== state.currentBoard.boardName).map( (b) => b.boardName)
+    transformedBoardNames.unshift(state.currentBoard.boardName)
 
     return ( 
         <div className="list-item--header__absolute">
@@ -219,22 +268,36 @@ export const ListActionMenu: React.FC<listActionMenuProps> = ({list, addCardTogg
                     </div>
                     <div className="listactionmenu-row selection movelist">
                         <p>Board</p>
-                        <select name="" id="" className="movelistselect">
+                        <select name="" id="" className="movelistselect" onChange={boardNameSelectHandler}>
                             {
-                                state.boards.map( (board, i) => (
-                                                <option value={board.boardName} key={i}>{board.boardName}</option>
+                                transformedBoardNames.map( (name, i) => (
+                                                <option value={name} key={i}>{name}</option>
                                             ))
                             }
                         </select>
                     </div>
                     <div className="listactionmenu-row selection movelist">
-                        <p>Position</p>
-                        <select name="" id="" >
-                          
-                        </select>
+                       
+                        {
+                            moveList.boardname === state.currentBoard.boardName
+                            && 
+                            <>
+                             <p>Position</p>
+                             <select name="" id="" onChange={boardPositionSelectHandler}>
+                            {
+                                moveList.positionsLength >= 0 
+                                ?
+                                Array(moveList.positionsLength).fill(69).flatMap( (_, i) => <option key={i} value={i}>{i+1}</option>)
+                                : 
+                                undefined
+                            }
+                            </select>
+                            </>
+                           
+                        }
                     </div>
                     <div className="listactionmenu-row button movelist">
-                        <button className="btn-primary">Move</button>
+                        <button className="btn-primary" onClick={moveListHandler}>Move</button>
                     </div>
                 </div>
             }

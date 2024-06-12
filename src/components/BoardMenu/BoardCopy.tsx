@@ -1,5 +1,6 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { UseBoardContext } from "../../context/boardcontext"
+import { UseNotificationContext } from "../../context/notificationcontext"
 
 
 type boardCopyProps = {
@@ -8,6 +9,7 @@ type boardCopyProps = {
 
 export const BoardCopyForm: React.FC<boardCopyProps> = ({ boardState }) => {
     const {state, dispatch} = UseBoardContext() 
+    const {showNotification} = UseNotificationContext()
     const [newBoard, setNewBoard] = useState({
         name: '',
         keepCards: false
@@ -19,19 +21,30 @@ export const BoardCopyForm: React.FC<boardCopyProps> = ({ boardState }) => {
         console.log(`is event checked or nah: `, event.target.checked)
         setNewBoard({...newBoard, keepCards: event.target.checked})
     }
-
-    const copyBoardHandler = () => {
+    const delay = (ms: number) => new Promise( resolve => setTimeout(resolve, ms))
+    const copyBoardHandler = async () => {
         if(newBoard.name.length > 0){
             console.log(state.boards)
-            const currentBoard = state.currentBoard 
+            const currentBoard = {...state.currentBoard}
             currentBoard.id = state.boards.length 
             currentBoard.boardName = newBoard.name
            if(!newBoard.keepCards){
             currentBoard.lists = [] 
            }
+           
+           dispatch({type: 'TOGGLE_BOARD_MENU', payload: false})
+
+           await delay(1000)
+           dispatch({type: 'ADD_BOARD', payload: currentBoard})
+
+
 
         }
     }
+
+    useEffect( () => {
+        setNewBoard({name: '', keepCards: false})
+    }, [])
     if (boardState !== 'copy board') return null
     return (
         <>
