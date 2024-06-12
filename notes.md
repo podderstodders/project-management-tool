@@ -561,3 +561,38 @@ moveList, should be easy.
 archive list is next.
 
 then its just doing all the modals 
+
+
+moving the list. 
+when rendering positions, i have to loop through boards using find.
+but having to check when i know its not falsey. 
+
+so refactor addBoard so that it checks to see if there are any active boards for duplicates .
+
+the problem is setting a notifcation message, its currently tied to a child component, but i need it for the parent component and around. 
+
+create a notification context, and it works nicely, 
+can use it everywhere.
+
+	- a trick.
+in the context, i was conditionally rendering the notification props.
+
+	- since i was conditionally rendering it with the active property set to true, then when rendered, it would just pop up at left: 2rem, instead of sliding from left: -4000px; 
+
+	- so the solution is to pass in the booleaning as property, and rendering the notification with it, so that its active, but left: -4000px, and when booleaning is true, then its left is changed to 2rem, and the transition effect can take effect. 
+
+for BoardAbout, 
+onBlur is on the textarea, and the save button is outside of the textarea, so nothing is being changed.
+
+onBlur rn is just toggling the state to change the textarea. I have removed it.
+
+I could change it so that it performs a crud operation. 
+
+June 12, 1:AM 
+
+Gonna spend some time now to revise the UI. 
+
+fix the sidebar, 
+
+add thick borders on modals . 
+

@@ -18,6 +18,7 @@ export type BoardState = {
     }
     isAddBoardHappening: boolean 
     boardMenuToggle: boolean
+    sidebarToggle: boolean
 }
 
 const initialState: BoardState = {
@@ -29,7 +30,8 @@ const initialState: BoardState = {
         mainGradient: updatedTrelloState[0].boardColor.gradient
     },
     isAddBoardHappening: false,
-    boardMenuToggle: false 
+    boardMenuToggle: false,
+    sidebarToggle: false
 }
 
 
@@ -50,6 +52,7 @@ type BoardAction =
     | {type: 'UPDATE_COLORS'; payload: boardColorProps}
     | {type: 'LOAD_BOARD'; payload: {board: boardProps, boardName: string}}
     | {type: 'TOGGLE_BOARD_MENU'; payload: boolean}
+    | {type: 'TOGGLE_SIDEBAR'; payload: boolean}
 
 const boardReducer = (state: BoardState, action: BoardAction): BoardState => {
     switch(action.type) {
@@ -85,6 +88,8 @@ const boardReducer = (state: BoardState, action: BoardAction): BoardState => {
             return loadBoardFromSidebar(state, action)
         case 'TOGGLE_BOARD_MENU':
             return boardMenuToggler(state,action)
+        case 'TOGGLE_SIDEBAR':
+            return sidebarToggler(state, action)
         default:
             throw new Error(`unknown action type: ${action}`)
     }
@@ -121,7 +126,8 @@ const addBoard = (state: BoardState, action: BoardAction): BoardState => {
     if(action.type !== 'ADD_BOARD') return state;
     return {
         ...state, 
-        boards: [...state.boards, action.payload]
+        boards: [...state.boards, action.payload],
+        currentBoard: action.payload
     }
 }
 
@@ -345,5 +351,13 @@ const boardMenuToggler = (state: BoardState, action: BoardAction): BoardState =>
     return {
         ...state, 
         boardMenuToggle: action.payload
+    }
+}
+
+const sidebarToggler = (state: BoardState, action: BoardAction): BoardState => {
+    if(action.type !== 'TOGGLE_SIDEBAR') return state 
+    return {
+        ...state, 
+        sidebarToggle: action.payload
     }
 }

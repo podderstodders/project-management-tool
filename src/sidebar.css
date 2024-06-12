@@ -11,24 +11,27 @@
   position: absolute;
   cursor: pointer;
   z-index: 5;
-  background-color: rgba(80, 95, 121, 0.9);
+  background-color: inherit;
 }
 
-.app-sidebar--openIcon:hover {
-  background-color: rgba(56, 63, 76, 0.356);
-}
 
 .app-sidebar--openIcon.unopened {
-  right: -1rem;
+  right: -1.6rem;
   top: 0.5rem;
   z-index: 5;
-  width: 30px;
-  height: 30px;
+  width: 40px;
+  height: 40px;
   padding: 4px;
   border-radius: 50%;
-  border: 1px solid rgb(148, 148, 148);
-  background-color: rgba(80, 95, 121, 0.9);
+  border: 2px solid white;
+  background-color: inherit;
 }
+
+.app-sidebar--openIcon:hover,
+.app-sidebar--openIcon.unopened:hover {
+  background-color: white;
+}
+
 
 .app-sidebar--openMessage {
   position: absolute;
@@ -215,6 +218,13 @@
 .addboard-row.input {
   margin-bottom: 0.5rem;
 }
+
+.addboard-row.input input.invalid:focus {
+  border: 2px solid red;
+  outline: 1px solid red;
+}
+
+
 
 
 .addboard-row.colors {

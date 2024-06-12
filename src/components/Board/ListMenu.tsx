@@ -1,8 +1,9 @@
 
-import { ReactNode, useState } from "react"
+import {useState } from "react"
 import { listProps } from "../../@types/board"
 import { LoadingAnimation } from "./LoadingAnimation"
 import { UseBoardContext } from "../../context/boardcontext"
+import { UseNotificationContext } from "../../context/notificationcontext"
 
 const listColorPalette = ['#EE7EA0', '#ffA9BA', '#EA7D70', '#F69F95', '#ffAf6E', '#FFCC80', '#7D88E0', '#B5BEFS', '#ABCDDE', '#CDBDEB']
 //helper function that moves an item from one index to another 
@@ -13,15 +14,15 @@ type listActionMenuProps = {
     addCardToggleHandler: () => void
     parentCloseHandler: () => void;
     copyList: (list: listProps) => void;
-    setNotification: (str: ReactNode, type: string) => void 
 }
 
 type listActionMenuStatesProps = 'menu' | 'add' | 'copy' | 'move' | 'moveAll' | 'sort'
 
 
-export const ListActionMenu: React.FC<listActionMenuProps> = ({list, addCardToggleHandler, parentCloseHandler, copyList, setNotification}) => {
+export const ListActionMenu: React.FC<listActionMenuProps> = ({list, addCardToggleHandler, parentCloseHandler, copyList}) => {
     // const listActionMenuStates = ['menu', 'add', 'copy', 'move', 'moveAll', 'sort']
     const {state, dispatch} = UseBoardContext() 
+    const {showNotification} = UseNotificationContext()
     const [currentState, setCurrentState] = useState<listActionMenuStatesProps>('menu')
     //copy list name tings 
     const [copyListName, setCopyListName] = useState(list.listName)
@@ -34,17 +35,16 @@ export const ListActionMenu: React.FC<listActionMenuProps> = ({list, addCardTogg
        
             setCopyListSubmitPorn(true)
             const newList = {...list, listName: copyListName, id: state.currentBoard.lists.length} as listProps
-            const inlineNotificationMessage = <span>Copying list <span className="blood underlined">{list.listName}</span> to new list <span className="trees underlined">{copyListName}</span></span>
-            setNotification(inlineNotificationMessage, 'success')
+            const inlineMessage = `Making a copy of list ${list.listName}.`
+            showNotification(inlineMessage, 'info', 1000)
             setTimeout( () => {
+                showNotification(`Successfully copy ${list.listName}`, 'success', 2000)
                 setCopyListSubmitPorn(false)
                 copyList(newList)
             }, 2000)
         }
     }
-    const getListLengthFromBoardName = (name: string) => {
-        const listLength = state.boards.find( (b) => b.boardName === name)
-    }
+
     const [moveList, setMoveList] = useState({
         boardname: state.currentBoard.boardName, 
         position: -1 
@@ -72,20 +72,17 @@ export const ListActionMenu: React.FC<listActionMenuProps> = ({list, addCardTogg
         })
         dispatch({type: "UPDATE_LISTS", payload: updatedLists})
         parentCloseHandler()
-        const inlineMessage = <span>Moving all items from <span className="underlined">{list.listName}</span> to <span className="green underlined">list {id}</span></span>
-        setNotification(inlineMessage, 'warning')
+        showNotification(`Moving all items from ${list.listName} to your choice.`, 'success', 1500)
        
     }
 
     const listWatchHandler = () => {
         if(!list.isWatching) {
             dispatch({type: 'UPDATE_LIST', payload: {...list, isWatching: true}})
-            const inlineMessage = <span>Now watching <span className="green underlined">{list.listName}</span></span>
-            setNotification(inlineMessage, 'success')
+            showNotification(`Now watching ${list.listName}`, 'success', 1200)
         } else {
             dispatch({type: 'UPDATE_LIST', payload: {...list, isWatching: false}})
-            const inlineMessage = <span>No more watching of <span className="red underlined">{list.listName}</span></span>
-            setNotification(inlineMessage, 'info')
+            showNotification(`No more watching of ${list.listName}`, 'info', 1200)
         }
     }
     const delay = (ms: number) => new Promise( resolve => setTimeout(resolve, ms))
@@ -121,11 +118,9 @@ export const ListActionMenu: React.FC<listActionMenuProps> = ({list, addCardTogg
         const updatedList = {...list, items: sortedList}
         dispatch({type: 'UPDATE_LIST', payload: updatedList})
         parentCloseHandler() 
-        let inlineMessage = <span>Sorting List</span>
-        setNotification(inlineMessage, 'warning')
+        showNotification(`Sorting list`, 'info', 1000)
         await delay(2000)
-        inlineMessage = <span>Listed Successfully Sorted!</span>
-        setNotification(inlineMessage, 'success')
+        showNotification(`Successfully sorted list`, 'success', 2000)
     }
 
     return ( 

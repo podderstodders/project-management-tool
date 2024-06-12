@@ -1,0 +1,60 @@
+import { useState } from "react"
+import { UseBoardContext } from "../../context/boardcontext"
+
+
+type boardCopyProps = {
+    boardState: string
+}
+
+export const BoardCopyForm: React.FC<boardCopyProps> = ({ boardState }) => {
+    const {state, dispatch} = UseBoardContext() 
+    const [newBoard, setNewBoard] = useState({
+        name: '',
+        keepCards: false
+    })
+    const nameChangeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setNewBoard({ ...newBoard, name: event.target.value })
+    }
+    const keepCardsCheckedHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
+        console.log(`is event checked or nah: `, event.target.checked)
+        setNewBoard({...newBoard, keepCards: event.target.checked})
+    }
+
+    const copyBoardHandler = () => {
+        if(newBoard.name.length > 0){
+            console.log(state.boards)
+            const currentBoard = state.currentBoard 
+            currentBoard.id = state.boards.length 
+            currentBoard.boardName = newBoard.name
+           if(!newBoard.keepCards){
+            currentBoard.lists = [] 
+           }
+
+        }
+    }
+    if (boardState !== 'copy board') return null
+    return (
+        <>
+            <div className="app-menu--row boardcopyform">
+                <div className="boardcopyform-row">
+                    <label htmlFor="boardtitle">Title</label>
+                    <input type="text" name="boardtitle" id="boardtitle" value={newBoard.name} placeholder={`Like "New Pets Onboarding" for example`} onChange={nameChangeHandler} />
+                </div>
+                <div className="boardcopyform-row">
+                    <label htmlFor="keepcards">
+                        <input type="checkbox" name="keepcards" id="keepcards" onChange={keepCardsCheckedHandler} />
+                        Keep Cards
+                    </label>
+                </div>
+                <div className="boardcopyform-row">
+                    <button className={newBoard.name.length === 0 ? 'disabled' : 'btn-primary'} onClick={copyBoardHandler}>Create</button>
+                </div>
+            </div>
+            <div className="app-menu--row divider"></div>
+            <div className="app-menu--row items">
+
+
+            </div>
+        </>
+    )
+}

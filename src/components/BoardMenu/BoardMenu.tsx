@@ -4,8 +4,9 @@ import { BoardDescription } from "./BoardAbout"
 import { UseBoardContext } from "../../context/boardcontext"
 import { BoardActivity } from "./BoardActivity"
 import { BoardBackground } from "./BoardBackground"
-import { BoardLabels } from "./BoardLabels"
 import { BoardArchive } from "./BoardArchive"
+import { BoardCopyForm } from "./BoardCopy"
+import { BoardRemove } from "./BoardRemove"
 
 
 type boardMenuProps = {
@@ -21,7 +22,7 @@ export const BoardMenu: React.FC<boardMenuProps> = ({active}) => {
         overflow: !active ? 'hidden' : undefined,
     }
     const boardMenuCloserHandler = () => {
-      dispatch({type: 'TOGGLE_BOARD_MENU'})
+      dispatch({type: 'TOGGLE_BOARD_MENU', payload: false})
     }
 
     return (
@@ -44,8 +45,9 @@ export const BoardMenu: React.FC<boardMenuProps> = ({active}) => {
           <BoardDescription boardState={currentState} />
           <BoardActivity state={currentState} />
           <BoardBackground boardState={currentState}/>
-          <BoardLabels boardState={currentState}/>
+          <BoardCopyForm boardState={currentState}/>
           <BoardArchive boardState={currentState} />
+          <BoardRemove boardState={currentState} />
       </article>
     )
 }

@@ -1,11 +1,10 @@
-import {useState, useEffect, ReactNode } from "react";
+import {useState } from "react";
 import { UseBoardContext } from "../../context/boardcontext";
 import { listProps, checkListProps, cardProps} from "../../@types/board";
 import { UserOverlayContext } from "../../context/overlaycontext";
 import { CardViewModal } from "../cardModal/CardModal";
 import { ListActionMenu } from "./ListMenu";
 import { AbsoluteEditCard } from "./AbsoluteEditCard";
-import { NotificationMessage } from "./NotificationMessage";
 import { NewListForm } from "./NewListForm";
 
 //not working because i havent did the dispatch on checklist things lol 
@@ -53,10 +52,10 @@ const darkenHexColor = (hex: string, amount: number): string => {
 } 
 
 type boardContainerProps = {
-  sidebarCloser: () => void;
+  tester123: () => void;
 }
 
-export const CurrentBoardContainer: React.FC<boardContainerProps> = ({ sidebarCloser}) => {
+export const CurrentBoardContainer: React.FC<boardContainerProps> = () => {
   const {showOverlay, hideOverlay} = UserOverlayContext()
   const {state, dispatch} = UseBoardContext()
   
@@ -65,7 +64,7 @@ export const CurrentBoardContainer: React.FC<boardContainerProps> = ({ sidebarCl
   //global state, all board has this new list toggle 
   const [newListToggle, setNewListToggle] = useState(false)
   const newListToggleHandler = (b: boolean) => {
-    sidebarCloser()
+    dispatch({type: 'TOGGLE_SIDEBAR', payload: false})
     setListMenuToggle({active: false, listName: '', index: -1})
     setListFooterInput({active: false, listId: -1, cardName: ''})
     setNewCardToggle({active: false, index: -1, value: ''})
@@ -102,7 +101,7 @@ export const CurrentBoardContainer: React.FC<boardContainerProps> = ({ sidebarCl
   const listFooterInputHandler = (listId: number) => {
 
     //setting state to remove any present modals/popups/tings
-    sidebarCloser() 
+   dispatch({type: 'TOGGLE_SIDEBAR', payload: false})
     setNewListToggle(false) 
     setListMenuToggle({active: false, listName: '', index: -1})
     setNewCardToggle({active: false, index: -1, value: ''})
@@ -211,7 +210,7 @@ export const CurrentBoardContainer: React.FC<boardContainerProps> = ({ sidebarCl
 
   const editCardAbsoluteHandler = (id: number, listId: number) => {
     console.log('edit card absolute handler just toggled for id - ', id)
-    sidebarCloser()
+    dispatch({type: 'TOGGLE_SIDEBAR', payload: false})
     setListMenuToggle({active: false, listName: '', index: -1})
     setNewListToggle(false)
     setListFooterInput({active: false, listId: -1, cardName: ''})
@@ -238,7 +237,7 @@ export const CurrentBoardContainer: React.FC<boardContainerProps> = ({ sidebarCl
   }
 
   const editCardModalHandler = (id: number, listId: number) => {
-    sidebarCloser()
+    dispatch({type: 'TOGGLE_SIDEBAR', payload: false})
     setListFooterInput({active: false, listId: -1, cardName: ''})
     setListMenuToggle({active: false, listName: '', index: -1})
     setNewListToggle(false)
@@ -281,7 +280,7 @@ export const CurrentBoardContainer: React.FC<boardContainerProps> = ({ sidebarCl
  
 
   const listMenuToggleHandler = (listName: string, index: number) => {
-      sidebarCloser()
+      dispatch({type: 'TOGGLE_SIDEBAR', payload: false})
       setNewListToggle(false) 
       setListFooterInput({active: false, listId: -1, cardName: ''})
       setNewCardToggle({active: false, index: -1, value: ''})
@@ -319,22 +318,6 @@ export const CurrentBoardContainer: React.FC<boardContainerProps> = ({ sidebarCl
       setEditCardModal({cardId, listId, isActive: true})
     }
   }
-  type notificationProps = {
-    active: boolean 
-    message: ReactNode | undefined,
-    type: string
-  }
-  const [tester69, setTester69] = useState<notificationProps>({
-    active: false,
-    message: undefined,
-    type: ''
-  })
-
-  const notificationMessageHandler = (child: ReactNode, type: string) => {
-    if(child !== undefined){
-      setTester69({...tester69, active: true, message: child, type})
-    }
-  }
 
   //toggle board menu using dispatch 
   const boardMenuTogglerHandler = () => {
@@ -348,13 +331,7 @@ export const CurrentBoardContainer: React.FC<boardContainerProps> = ({ sidebarCl
   }
 
 
-  useEffect( () => {
-    if(tester69.active) { 
-      setTimeout( () => {
-        setTester69({active: false, message: undefined, type: 'info'})
-      }, 3000)
-    }
-  }, [tester69.active])
+
 
   if(!currentBoard) {
     return <div> board not found uh oh oh uh</div>
@@ -454,7 +431,7 @@ export const CurrentBoardContainer: React.FC<boardContainerProps> = ({ sidebarCl
                       && 
                       listMenuToggle.index === index 
                       && 
-                      <ListActionMenu list={list}  addCardToggleHandler={() => newCardToggleHandler(index)} parentCloseHandler={() => setListMenuToggle({active: false, listName: '', index: -1})} copyList={copyListHandler} setNotification={notificationMessageHandler}/> 
+                      <ListActionMenu list={list}  addCardToggleHandler={() => newCardToggleHandler(index)} parentCloseHandler={() => setListMenuToggle({active: false, listName: '', index: -1})} copyList={copyListHandler}/> 
                     }
                   </div>
                   <div className="list-item--cards">
@@ -481,7 +458,7 @@ export const CurrentBoardContainer: React.FC<boardContainerProps> = ({ sidebarCl
                               {
                                 card.coverProperties && card.coverProperties.size === 'half' && <div className="card-cover" style={{backgroundColor: card.coverProperties.colorCode}}></div>
                               }
-                              <div className="card-info">
+                              <div className="card-info" onClick={() => editCardModalHandler(card.id, list.id)} style={{overflow: 'hidden'}}>
                                 {
                                   card.coverProperties && card.coverProperties.size == 'full' || <div className="labels">
                                   {
@@ -494,7 +471,7 @@ export const CurrentBoardContainer: React.FC<boardContainerProps> = ({ sidebarCl
                                   }
                                 </div>
                                 }
-                                <div onClick={() => editCardModalHandler(card.id, list.id)} style={{overflow: 'hidden'}}>{card.title}</div>
+                                <div>{card.title}</div>
                                 <div className="card-icons">
                                   {
                                     card.isWatching 
@@ -585,7 +562,7 @@ export const CurrentBoardContainer: React.FC<boardContainerProps> = ({ sidebarCl
         </div>
         <CardViewModal isActive={editCardModal.isActive} cardId={editCardModal.cardId} closeHandler={cancelEditCardModalHandler}/>
     
-        <NotificationMessage type={tester69.type} isActive={tester69.active} message={tester69.message} closeHandler={() => setTester69({...tester69, active: false, message: ''})}/>
+     
       </section>
     )
     

@@ -609,9 +609,7 @@ select.movelistselect option.currentboard {
 }
 
 .card-info {
-  padding: 0.5rem;
-
-  
+  padding: 0.5rem;  
 }
 .list-item--card .labels {
   display: flex;
@@ -1255,4 +1253,35 @@ select.movelistselect option.currentboard {
   display: flex;
   gap: 1rem;
   align-items: center;
+}
+
+.app-menu--row.boardcopyform {
+  padding: 0.5rem 0;
+}
+
+.boardcopyform-row {
+  margin-bottom: 0.5rem;
+}
+
+.boardcopyform-row input[type=text] {
+  width: 100%;
+  padding: 0.5rem;
+}
+
+.boardcopyform-row input[type=text]:focus {
+  outline: 1px solid transparent;
+  border: 2px solid rgb(0, 26, 255);
+}
+
+.boardcopyform-row label {
+  font-weight: 600;
+}
+
+.boardcopyform-row input[type=checkbox] {
+  margin-right: 7px;
+}
+
+.app-menu--row.boardremove p {
+  text-align: center;
+  font-size: 2rem;
 }

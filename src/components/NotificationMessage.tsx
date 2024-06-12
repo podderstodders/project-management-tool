@@ -5,9 +5,8 @@ type notificationMessageProps = {
     type: string
     isActive: boolean
     message: ReactNode 
-    closeHandler: () => void; 
 }
-export const NotificationMessage: React.FC<notificationMessageProps> = ({type, isActive, message, closeHandler}) => {
+export const NotificationMessage: React.FC<notificationMessageProps> = ({type, isActive, message}) => {
     const icons: Record<string, ReactNode> = {
       success: <svg width="50" height="50" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path id="Vector" d="M15 10L11 14L9 12M12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12C21 16.9706 16.9706 21 12 21Z" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>,
       error: <svg width="50" height="50" viewBox="0 0 25 25" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12.5 16V14.5M12.5 9V13M20.5 12.5C20.5 16.9183 16.9183 20.5 12.5 20.5C8.08172 20.5 4.5 16.9183 4.5 12.5C4.5 8.08172 8.08172 4.5 12.5 4.5C16.9183 4.5 20.5 8.08172 20.5 12.5Z" stroke="#121923" stroke-width="1.2"/></svg>,
@@ -27,7 +26,7 @@ export const NotificationMessage: React.FC<notificationMessageProps> = ({type, i
             </div>
             <div className="message">{message}</div>
             <div>
-              <button className="btn-nobg" onClick={closeHandler}>x</button>
+              <button className="btn-nobg">x</button>
             </div>
           </div>
         </div>

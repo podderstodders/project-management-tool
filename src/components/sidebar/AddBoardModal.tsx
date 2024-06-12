@@ -3,6 +3,7 @@ import { useState } from "react"
 import { BoardColorModal } from "./BoardColorModal";
 import { boardColorProps } from "../../@types/board";
 import { UseBoardContext } from "../../context/boardcontext";
+import { UseNotificationContext } from "../../context/notificationcontext";
 
 type addBoardModalProps = {
     addNewBoard: (boardName: string, colors: boardColorProps) => Promise<void>;
@@ -18,7 +19,7 @@ const defaultBoardColorState = {
 
 export const AddBoardModal: React.FC<addBoardModalProps> = ({ closeHandler, addNewBoard}) => {
     const {state} = UseBoardContext() 
-
+    const {showNotification} = UseNotificationContext()
     const firstFive = boardColors.slice(0, 5)
     const [boardTitle, setBoardTitle] = useState('')
     const [previewGradient, setPreviewGradient] = useState(defaultBoardColorState)
@@ -32,9 +33,26 @@ export const AddBoardModal: React.FC<addBoardModalProps> = ({ closeHandler, addN
         setPreviewGradient({primary: p, secondary: s, gradient: g, emoji: e})
     }
 
-    const addBoard = () => {
+    const [titleError, setTitleError] = useState(false)
+    const [trusttheprocess, settrusttheprocess] = useState(false)
+    const delay = (ms: number) => new Promise( resolve => setTimeout(resolve, ms))
+    const addBoard = async () => {
+
        if(boardTitle.length > 0 && previewGradient.primary.length > 0) {
-            addNewBoard(boardTitle, previewGradient)
+            settrusttheprocess(true)
+            setTitleError(false)
+            await delay(1000)
+            const isDuplicate = state.boards.find( (board) => board.boardName === boardTitle)
+
+            if(isDuplicate === undefined) {
+                showNotification('Creating new board. Give me a sec dawg', 'info', 2000)
+                addNewBoard(boardTitle, previewGradient)
+            } else {
+                //set notification message 
+                setTitleError(true)
+                showNotification('Board name already exists. Please use a different name.', 'error', 1200)
+            }
+            settrusttheprocess(false)
        }
     }
 
@@ -92,11 +110,12 @@ export const AddBoardModal: React.FC<addBoardModalProps> = ({ closeHandler, addN
                 </div>
                 <div className="addboard-row input">
                     <label htmlFor="">Board Title</label>
-                    <input type="text" name="" id="" value={boardTitle} onChange={boardTitleHandler}/>
+                  
+                    <input type="text" name="" id="" className={titleError ? "invalid" : undefined} value={boardTitle} onChange={boardTitleHandler}/>
                 </div>
             
                 <div className="addboard-row button">
-                    <button className={`btn-darker ${boardTitle.length === 0 || state.isAddBoardHappening ? 'disabled' : undefined}`} onClick={addBoard}>Create</button>
+                    <button className={`btn-darker ${boardTitle.length === 0 || state.isAddBoardHappening || trusttheprocess ? 'disabled' : undefined}`} onClick={addBoard}>Create</button>
                 </div>
             </div>
         </div>

@@ -135,7 +135,7 @@
 
   .labels-absolute--menu {
     position: fixed;
-    top: 5rem;
+    top: 3rem;
     width: 300px;
     z-index: 3;
     background-color: white;

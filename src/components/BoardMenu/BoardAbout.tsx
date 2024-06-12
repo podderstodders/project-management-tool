@@ -71,7 +71,7 @@ export const BoardDescription: React.FC<boardDescriptionProps> = ({boardState}) 
             {
               titleToggler && 
               <div className="titleAbout-row texteditor">
-                <textarea name="boardname" id="boardname" value={localCurrentBoard.boardName} onChange={titleChangeHandler} placeholder={localCurrentBoard.boardName} onBlur={() => setTitleToggler(false)} autoFocus></textarea>
+                <textarea name="boardname" id="boardname" value={localCurrentBoard.boardName} onChange={titleChangeHandler} placeholder={localCurrentBoard.boardName} autoFocus onBlur={titleSubmitHandler}></textarea>
                 <div className="texteditor-actions">
                   <button className="btn-primary" onClickCapture={titleSubmitHandler}>Save</button>
                   <button className="btn-darker" onClickCapture={() => setTitleToggler(false)}>Cancel</button>
@@ -111,7 +111,7 @@ export const BoardDescription: React.FC<boardDescriptionProps> = ({boardState}) 
               descriptionToggler 
               && 
               <div className="textarea-editor">
-                <textarea name="boarddescription" id="boarddescription" value={localCurrentBoard.description} onChange={descriptionChangeHandler}  placeholder={localCurrentBoard.description} autoFocus onBlur={() => setDescriptionToggler(false)}></textarea>
+                <textarea name="boarddescription" id="boarddescription" value={localCurrentBoard.description} onChange={descriptionChangeHandler}  placeholder={localCurrentBoard.description} autoFocus onBlur={descriptionSubmitHandler}></textarea>
                 <div className="textarea-editor--footer">
                   <div className="taef-lhs">
                     <button className="btn-primary" onClick={descriptionSubmitHandler}>Save</button>
