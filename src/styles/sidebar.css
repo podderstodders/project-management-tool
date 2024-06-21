@@ -6,6 +6,11 @@
   border-right: 2px solid white;
   transition: background-color 0.5s ease-in;
 }
+.app-sidebar--header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
 
 .app-sidebar--openIcon {
   position: absolute;
@@ -75,10 +80,11 @@
 }
 
 .app-sidebar-row.header {
-
+  padding-inline: 0.3rem;
   font-size: 1rem;
   font-weight: 700;
   margin-bottom: 0.5rem;
+  text-transform: uppercase;
 }
 
 .app-sidebar-row.item {
@@ -131,7 +137,7 @@
   font-size: 0.95rem;
   position: absolute;
   top: 5.8rem;
-  left: 15.75rem;
+  left: 13.75rem;
   z-index: 4;
   background-color: white;
   color: black;

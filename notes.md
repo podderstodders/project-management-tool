@@ -619,3 +619,48 @@ but if the user deletes all the boards, then it breaks. context breaks.
 
 So i can either stop it and keep at least 1 open. or I change the type of boardContext to be possibly undefined, 
 but that would mean everywhere in my app would break. 
+
+June 12, 10PM 
+
+Been trying  to implement a label feature on the boardMenu,
+
+but a problem is that I have nested the labeltype to be within a card. so if i were to create a new label, i wouldnt have anywhere to put the label.
+
+shucks 
+
+
+archived: 
+
+can archive list and cards 
+
+so how can i store this 
+well the basis, is that on the boardMenu we can look at archive things 
+
+so we can assume that the archive things we're looking at is based on boards 
+archive = {
+	boardName: {
+		archiveList: 
+		archiveCards: 
+	}
+}
+
+
+archive, can restore, and delete, and view 
+
+holy crap .
+
+if card is archive,
+and the list is archive 
+
+and you restore the cards, it will be placed in the list that archived, and when you restore the list, the cards will be avaiable. 
+
+hmmmm sounds complicated enough .
+
+ok so ifyou archive the list, then it can only be restored, cant be deleted. 
+
+i feel like i cant implement the archive feature because one of important constraint, list 'id' is indexed-based instead of a random generated number. 
+
+And so if i remove lists from 'currentBoard', the id of every active list will be readjusted based on the size of the array
+
+And so it's going to be hard to associate archived cards to archived lists, unless i add additional properties to the current type system to signify that the list or card is an archived item. 
+

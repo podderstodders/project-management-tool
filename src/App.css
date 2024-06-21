@@ -1126,17 +1126,7 @@ select.movelistselect option.currentboard {
 /* board menu - labels */
 
 .app-menu--row.boardlabel {
-
-}
-
-.app-menu--row.boardlabel .boardlabel-row.searchinput {
-
-}
-
-.app-menu--row.boardlabel .boardlabel-row.searchinput input[type=search] {
-  width: 100%; 
-  padding: 0.5rem;
-  line-height: 1.25rem;
+  position: relative;
 }
 
 .app-menu--row.boardlabel .boardlabel-row.labels {
@@ -1198,6 +1188,146 @@ select.movelistselect option.currentboard {
   gap: 0.65rem;
 }
 
+.app-menu--row.boardlabel .boardEditLabelContainer {
+  position: absolute;
+  top: 3rem;
+  left: 0;
+  width: 100%;
+  background-color: white;
+  height: 400px;
+  border: 2px solid black;
+  padding: 1rem;
+  background-color: pink;
+}
+
+.app-menu--row.boardlabel .boardCreateLabelContainer {
+  position: absolute;
+  top: 1.5rem;
+  left: 0;
+  width: 100%;
+  background-color: white;
+
+  border: 2px solid black;
+  border-radius: 10px;
+
+  z-index: 6;
+}
+
+.boardCreateLabelContainer .boardlabel-crud--row.flexed {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.5rem;
+  align-items: center;
+  padding: 0.5rem;
+
+
+}
+
+.boardCreateLabelContainer .boardlabel-crud--row.flexed div:not(.big) {
+  flex-basis: 30px;
+}
+.boardCreateLabelContainer .boardlabel-crud--row.flexed div.big {
+  padding-top: 5px;
+  font-size: 1.15rem;
+}
+
+.boardCreateLabelContainer .boardlabel-crud--row.display {
+
+  padding: 1.6rem;
+  background-color: #f5f5f5;
+}
+.boardCreateLabelContainer .boardlabel-crud--row.display .display-container {
+  padding: 1rem;
+  background-color: rgb(255, 255, 255);
+}
+
+.boardCreateLabelContainer .boardlabel-crud--row.form {
+  padding: 1rem 0.5rem;
+}
+
+.blcrform-row {
+  margin-bottom: 0.6rem;
+}
+
+
+.blcrform-row label {
+  font-weight: 700;
+  font-size: 0.85rem;
+}
+
+.blcrform-row input[type=text] {
+  width: 100%;
+}
+
+.blcrform-colors {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(50px, 1fr));
+  gap: 5px;
+}
+
+.blcrform-colors .blcrform-color--item {
+  position: relative;
+  padding: 1rem;
+  background-color: pink;
+}
+
+.blcrform-color--item__absoluteText {
+  display: none;
+  position: absolute;
+  left: -1rem;
+  bottom: 0;
+  z-index: -1;
+  background-color: black;
+  color: white;
+  padding: 2px 8px;
+  font-size: 0.75rem;
+  text-transform: capitalize;
+  font-weight: 700;
+  white-space: nowrap;
+  transition: display 0.1s, z-index 0.2s, bottom 0.7s;
+}
+
+
+.blcrform-colors .blcrform-color--item:hover .blcrform-color--item__absoluteText {
+  display: block;
+  z-index: 6;
+  bottom: -1.7rem;
+  cursor: pointer;
+}
+
+.blcrform-color--item__absoluteSelectedIcon {
+  display: none;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+
+.blcrform-divider {
+  padding: 0.75rem 0;
+}
+
+/* delete or nall */
+
+.blcrform-button {
+  margin-top: 1rem;
+}
+.blcrform-button button {
+  width: 100%;
+}
+
+.blcrform-divider--container {
+  height: 1px;
+  border: 1px solid black;
+}
+
+.blcrform-buttons {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.5rem;
+}
 
 /* title about */
 

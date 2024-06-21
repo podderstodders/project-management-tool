@@ -50,6 +50,7 @@ export const BoardMenu = () => {
           <BoardCopyForm boardState={currentState}/>
           <BoardArchive boardState={currentState} />
           <BoardRemove boardState={currentState} />
+        
       </article>
     )
 }

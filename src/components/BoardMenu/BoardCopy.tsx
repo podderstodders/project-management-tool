@@ -28,12 +28,13 @@ export const BoardCopyForm: React.FC<boardCopyProps> = ({ boardState }) => {
             const currentBoard = {...state.currentBoard}
             currentBoard.id = state.boards.length 
             currentBoard.boardName = newBoard.name
+            currentBoard.description = '' 
            if(!newBoard.keepCards){
             currentBoard.lists = [] 
            }
            
            dispatch({type: 'TOGGLE_BOARD_MENU', payload: false})
-
+           showNotification(`Copying board ${state.currentBoard.boardName} to new board ${currentBoard.boardName}, ${newBoard.keepCards ? ' and their kids' : ' and done.'}`, 'info', 3000)
            await delay(1000)
            dispatch({type: 'ADD_BOARD', payload: currentBoard})
 

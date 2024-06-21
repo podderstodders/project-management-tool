@@ -95,7 +95,9 @@ export const SidebarContainer = () => {
             <div className="app-sidebar--container">
             <div className="app-sidebar--header">
                 <ReallyStupidJuan />
-                <div>Your's Workspace</div>
+                <div>
+                  <p>Sexy</p>
+                </div>
             </div>
             <SidebarBoardContainer current={state.currentBoard.boardName} changeBoardHandler={changeBoard} newBoardToggle={() => setNewBoardToggle(!newBoardToggle)}/>
             {
