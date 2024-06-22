@@ -15,7 +15,6 @@ export const CheckListHealthBar: React.FC<checkListHealthBarProps> = ({listLengt
     }
 
     const thePercentage = computePercentage(checkedLength, listLength)
-    console.log(thePercentage)
     let isDone = false;
     if(thePercentage === 100){
       isDone = true;

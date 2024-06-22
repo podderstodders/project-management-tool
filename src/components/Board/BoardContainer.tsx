@@ -175,7 +175,7 @@ export const CurrentBoardContainer = () => {
   }
   const addNewCardHandler = (listId: number) => {
     if(newCardToggle.active && newCardToggle.value.length > 0){
-      console.log('attempting to add to front')
+   
       dispatch({type: 'ADD_CARD_FRONT', payload: {listId, cardTitle: newCardToggle.value}})
       setNewCardToggle({
         active: false,
@@ -189,11 +189,11 @@ export const CurrentBoardContainer = () => {
   //assume that str has already been parsed
   //higher order function 
   const absoluteEditEditHandler = (cardTitle: string, card: cardProps) => {
-    console.log('attempting to edit via absolute edit')
+   
     if(editCardAbsolute.isActive) {
-      console.log('attempting to perform the insicision')
+
       const updatedCard = {...card, title: cardTitle} as cardProps
-      console.log(updatedCard)
+ 
       dispatch({type: 'UPDATE_CARD',  payload: updatedCard})
       cancelEditCardAbsoluteHandler()
 
@@ -206,7 +206,6 @@ export const CurrentBoardContainer = () => {
   
 
   const editCardAbsoluteHandler = (id: number, listId: number) => {
-    console.log('edit card absolute handler just toggled for id - ', id)
     dispatch({type: 'TOGGLE_SIDEBAR', payload: false})
     setListMenuToggle({active: false, listName: '', index: -1})
     setNewListToggle(false)

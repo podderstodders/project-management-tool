@@ -22,7 +22,7 @@ export const AbsoluteEditCard: React.FC<absoluteEditCardProps> = ({isActive, car
 
     const onSubmitHandler = () => {
       if(cardTitle.length > 0){
-        console.log('attempting to call the handler now')
+  
         saveCardHandler(cardTitle, card)
 
       }

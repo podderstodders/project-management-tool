@@ -225,7 +225,6 @@ const LabelRow: React.FC<labelRowProps> = ({label, editLabelHandler, checkedHand
    
     const checkeddHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
        
-        console.log(`index-${label.labelIndex} - checked-${event.target.checked}`)
         checkedHandler(label.labelIndex, event.target.checked)
         //dispatch 
     }
@@ -278,7 +277,7 @@ const LabelEditMenu:React.FC<labelEditMenuProps> = ({label, saveHandler, goBackH
 
     const [textColorToggle, setTextColorToggle] = useState(false) 
     const ccolors = convertColorListToArray(colorLabels)
-    console.log(label)
+
     return (
         <div className="labels-menu--container edit">
                 <div className="label-edit--row header">

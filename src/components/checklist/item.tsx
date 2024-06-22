@@ -29,7 +29,7 @@ export const CheckListItem:React.FC<checkListItemProps> = ({listItemChecked,list
     const isCheckedHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
       if(event.target.checked){
         //a handler from app that recieves the index, and updates the checkbox state 
-        console.log(`checked the ${listItemIndex} checkboxed`)
+
         checkedHandler(listItemIndex)
       } else {
         //unchecked, call the remove 

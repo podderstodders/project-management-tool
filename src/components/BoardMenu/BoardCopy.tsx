@@ -18,13 +18,13 @@ export const BoardCopyForm: React.FC<boardCopyProps> = ({ boardState }) => {
         setNewBoard({ ...newBoard, name: event.target.value })
     }
     const keepCardsCheckedHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
-        console.log(`is event checked or nah: `, event.target.checked)
+
         setNewBoard({...newBoard, keepCards: event.target.checked})
     }
     const delay = (ms: number) => new Promise( resolve => setTimeout(resolve, ms))
     const copyBoardHandler = async () => {
         if(newBoard.name.length > 0){
-            console.log(state.boards)
+       
             const currentBoard = {...state.currentBoard}
             currentBoard.id = state.boards.length 
             currentBoard.boardName = newBoard.name

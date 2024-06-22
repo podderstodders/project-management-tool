@@ -54,7 +54,7 @@ export const ListActionMenu: React.FC<listActionMenuProps> = ({list, listIndex, 
 
     const boardNameSelectHandler = (event: React.ChangeEvent<HTMLSelectElement>) => {
         const listLength = getBoardListLengthByName(event.target.value)
-        console.log(listLength)
+
         setMoveList({...moveList, boardname: event.target.value, positionsLength: listLength })
         //do something that sets position 
         
@@ -70,7 +70,7 @@ export const ListActionMenu: React.FC<listActionMenuProps> = ({list, listIndex, 
     }
 
     const moveListHandler = () => {
-        console.log(moveList)
+
         if(moveList.boardname === state.currentBoard.boardName) {
             if(listIndex === moveList.positionIndex) {
                 showNotification('cant move it because its the same position bro!', 'error', 2000)

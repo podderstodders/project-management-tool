@@ -10,14 +10,6 @@ import { checkListItemProps } from '../../@types/board'
 //helper function 
 
 
-const removeArrayItemByIndex = (id: number, arr: number[]) => {
-    if(id >= 0 && id < arr.length) {
-      const newArr = [...arr]
-      newArr.splice(id, 1)
-      return newArr;
-    }
-    return null
-}
 
 type theCheckListProps = {
   checklistId: number
@@ -120,7 +112,7 @@ export const TheCheckList: React.FC<theCheckListProps> = ({checklistId, card, ti
       }
 
     const addCheckboxHandler = (index: number) => {
-        console.log(checkboxes)
+  
         //also update list 
         const updatedList = list.map( (item) => {
           if(item.itemIndex === index){
@@ -158,8 +150,6 @@ export const TheCheckList: React.FC<theCheckListProps> = ({checklistId, card, ti
 
       const removeCheckboxHandler = (index: number) => {
         //a problem here 
-        const ww = removeArrayItemByIndex(index, Array.from(checkboxes))
-        console.log(ww)
         const updatedList = list.map( (item) => {
           if(item.itemIndex === index){
             item.itemChecked = false

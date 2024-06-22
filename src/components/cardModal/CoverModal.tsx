@@ -48,7 +48,7 @@ export const CoverFeature: React.FC<coverModalProps> = ({card, isCool}) => {
 
             setCoverProps( (prev) => {
                 const updatedCoverProps = {...prev, size: newSize} as coverPropertiesProps
-                console.log('updatedcoverprops size is now: ', newSize)
+  
                 const updatedCard = {...card, coverProperties: updatedCoverProps}
                 dispatch({
                     type: 'UPDATE_CARD',
@@ -68,7 +68,7 @@ export const CoverFeature: React.FC<coverModalProps> = ({card, isCool}) => {
             colorCode: code,
             size: 'full'
         }
-        console.log(newCard)
+
         setCoverProps(newCard.coverProperties)
         //call dispatch function to update card 
         dispatch({type: 'UPDATE_CARD', payload: newCard})

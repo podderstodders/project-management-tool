@@ -48,10 +48,10 @@ export const CardModalTitleInput: React.FC<cardModalInputElementProps> = ({ card
     //i need a dispatch for updating 
     const onBlurHandler = () => {
         if(cardDescription.length === 0 || cardDescription === card.description){
-            console.log('no change to description, so no update')
+  
             setCardDescription(card.description)
         }else {
-            console.log('change to description, so an update happened')
+         
             const newCard = {...card, description: cardDescription} as cardProps
             dispatch({type: 'UPDATE_CARD', payload: newCard})
         }

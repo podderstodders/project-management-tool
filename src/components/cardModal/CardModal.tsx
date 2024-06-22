@@ -35,7 +35,7 @@ const findCardById = (board: boardProps, cardId: number): cardProps | undefined=
 export const CardViewModal: React.FC<cardViewModalProps> = ({isActive, cardId, closeHandler}) => {
     const {state, dispatch} = UseBoardContext()  
     const card = findCardById(state.currentBoard, cardId)
-    console.log(card)
+
     const [isWatching, setIsWatching] = useState(false)
     const [labelMenuToggler, setLabelMenuToggler] = useState({
       active: false, 
