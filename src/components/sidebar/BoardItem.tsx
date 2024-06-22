@@ -8,7 +8,7 @@ type boardContainerProps = {
 }
 
 export const SidebarBoardContainer: React.FC<boardContainerProps> = ({ current, changeBoardHandler, newBoardToggle}) => {
-    const {state, dispatch} = UseBoardContext()
+    const {state} = UseBoardContext()
     const filtered = state.boards.sort( (a,b) => Number(b.isFavorite) - Number(a.isFavorite))
 
     
@@ -21,8 +21,8 @@ export const SidebarBoardContainer: React.FC<boardContainerProps> = ({ current, 
                 </div>
             </div>
             {
-                filtered.map( (obj, index) => (
-                    <SidebarBoardItem name={obj.boardName} isFav={obj.isFavorite} index={index} isActive={obj.boardName == current} changeBoard={changeBoardHandler}/>
+                filtered.map( (obj) => (
+                    <SidebarBoardItem name={obj.boardName} isFav={obj.isFavorite} isActive={obj.boardName == current} changeBoard={changeBoardHandler}/>
                 ))
             }
         </div>
@@ -32,12 +32,11 @@ export const SidebarBoardContainer: React.FC<boardContainerProps> = ({ current, 
 type boardItemProps = {
     name: string, 
     isFav: boolean, 
-    index: number,
     isActive: boolean,
     changeBoard: (str: string) => void;
 }
 
-const SidebarBoardItem: React.FC<boardItemProps> = ({name, isFav, index, isActive, changeBoard}) => {
+const SidebarBoardItem: React.FC<boardItemProps> = ({name, isFav, isActive, changeBoard}) => {
     return (
         <div className={`app-sidebar-row flexed item ${isActive ? 'active' : ''}`} onClick={() => changeBoard(name)}>
             <div>

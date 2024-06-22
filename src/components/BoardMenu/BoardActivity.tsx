@@ -1,6 +1,3 @@
-import { useState, useEffect } from "react"
-
-
 type boardActivityProps = {
     state: string 
 }
