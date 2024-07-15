@@ -120,7 +120,7 @@ export const CardViewModal: React.FC<cardViewModalProps> = ({isActive, cardId, c
                             <CardModalTitleInput card={card}/>
                             <div className="lhs-item--textblock">
                               <div>in list</div>
-                              <div style={{textDecoration: 'underline'}}>yomoms</div>
+                              <div style={{textDecoration: 'underline'}}>{card.title}</div>
                               {
                                 card.isWatching 
                                 && 
